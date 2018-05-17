@@ -1,0 +1,89 @@
+/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css?family=Lora');
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
+* { 
+--main-orange: #FFC107;
+--main-blue: #40C4FF;
+--main-grey: #FAFAFA;
+--orange-dark: #E89E00;
+/* --orange-dark: #FFAB00; */
+--offset-blue: #07C1FF;
+--accent-green: #69ff64;
+--accent-blue:  #0745FF;
+--accent-red:  #ff470b;
+--accent-purple: #C107FF;
+--accent-yellow: #e3ff07;
+}
+
+* {
+    font-family: 'Lora', serif;
+}
+.mat-form-field-wrapper {
+    padding-bottom: 5px;
+    padding-top: 10px;
+}
+.submit-button {
+    background-color: var(--main-blue)!important;
+    max-width: 150px;
+    color: white!important;
+    font-size: 1.25em;
+    min-width: 100px;
+}
+.delete-button {
+    background-color: var(--accent-red);
+    max-width: 150px;
+    color: white!important;
+    font-size: 1.25em;
+    min-width: 100px;
+}
+.cancel-button {
+    background-color: white;
+    max-width: 150px;
+    color: black;
+    font-size: 1.25em;
+    min-width: 100px;
+}
+.submit {
+    display: flex;
+    margin-top: 15px;
+}
+
+.confirm-cancel {
+    margin-left: 25px;
+}
+
+progress::-webkit-progress-value {
+    transition: width 0.1s ease;
+}
+.progress {
+    width: 100%;
+}
+.form-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-container > * {
+  width: 100%;
+}
+
+.card {
+    max-width: 400px;
+    margin-right: 0px;
+    margin-left: 0px;
+}
+
+.dropzone {
+    margin-top: 10px;
+}
+.card-header {
+    background-color: var(--main-orange)!important;
+    color: white;
+    font-size: 1.5em;
+}
+.mat-form-field-flex {
+    display: inline-flex;
+    align-items: baseline;
+    width: 100%;
+}

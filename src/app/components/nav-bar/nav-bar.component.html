@@ -1,0 +1,53 @@
+<!-- <p>
+  nav-bar works!
+</p> -->
+<!-- <div class="row accent-bar">
+</div> -->
+<nav class="navbar navbar-expand-md navbar-dark mb-4">
+  <div class="container">
+    <a routerLink="/" class="navbar-brand">GIFT Day</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarMain">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarMain">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item" routerLink="/workshops">
+          <a data-toggle="collapse" data-target="#navbarMain" class="nav-link">Workshops</a>
+        </li>
+        <li class="nav-item" routerLink="/presenters">
+          <a data-toggle="collapse" data-target="#navbarMain" class="nav-link">Presenters</a>
+        </li>
+        <!-- <li class="nav-item" routerLink="/profile">
+        <a data-toggle="collapse" data-target="#navbarMain"class="nav-link">Profile</a>
+      </li>
+      <li class="nav-item" routerLink="/login" >
+        <a data-toggle="collapse" data-target="#navbarMain"class="nav-link">Login</a>
+      </li> -->
+      </ul>
+
+      <ul class="navbar-nav ml-auto">
+        <!-- <li *ngIf="!isLoggedIn && showRegister" routerLink="/register" class="nav-item">
+        <a data-toggle="collapse" data-target="#navbarMain"class="nav-link">Register</a>
+      </li> -->
+        <li *ngIf="!isLoggedIn" routerLink="/login" class="nav-item">
+          <a data-toggle="collapse" data-target="#navbarMain" class="nav-link">Login</a>
+        </li>
+        <!-- <li *ngIf="isLoggedIn"class="nav-item">
+        <a href="#" class="nav-link" data-toggle="collapse" data-target="#navbarMain">{{ loggedInUser }}</a>
+      </li> -->
+        <li *ngIf="isLoggedIn" routerLink="/profile" class="nav-item">
+          <a data-toggle="collapse" data-target="#navbarMain" class="nav-link">Profile</a>
+        </li>
+        <li *ngIf="isLoggedIn" class="nav-item" (click)="onLogoutClick()">
+          <a data-toggle="collapse" data-target="#navbarMain" href="#" class="nav-link">Logout</a>
+        </li>
+        <!-- <li routerLink="/profile"class="nav-item">
+        <a data-toggle="collapse" data-target="#navbarMain" class="nav-link">Profile</a>
+      </li> -->
+        <!-- <li class="nav-item" (click)="onLogoutClick()">
+        <a data-toggle="collapse" data-target="#navbarMain" href="#"  class="nav-link">Logout</a>
+      </li> -->
+      </ul>
+    </div>
+  </div>
+</nav>

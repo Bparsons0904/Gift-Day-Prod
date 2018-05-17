@@ -1,0 +1,94 @@
+<div class="container-fluid">
+  <div class="card mx-auto" *ngIf="newUser">
+    <div class="card-header">
+      <i class="fa fa-lock"></i> User Registration
+    </div>
+    <div class="card-body">
+      <form [formGroup]="userForm" (ngSubmit)="signup()">
+        <div class="form-container">
+          <mat-form-field>
+            <input matInput placeholder="Email" type="email" id="email" class="form-control" formControlName="email" required>
+            <mat-error *ngIf="formErrors.email">
+              {{ formErrors.email }}
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder="Password" type="password" id="password" class="form-control" formControlName="password" required>
+            <mat-error *ngIf="formErrors.password">
+              {{ formErrors.password }}
+            </mat-error>
+          </mat-form-field>
+          <div class="submit">
+            <div class="ml-auto">
+              <button type="submit" value="Submit" mat-raised-button class="submit-button text-center" [disabled]="!userForm.valid">Submit</button>
+            </div>
+          </div>
+
+        </div>
+      </form>
+      <button class="btn btn-link btn-block" (click)="toggleForm()">Already Registered?</button>
+    </div>
+    <div class="card-footer">
+      <div class="text-center">
+        <h4>Social Login</h4>
+      </div>
+      <button (click)="signInWithGoogle()" class="btn btn-block btn-google">
+        <i class="fa fa-google"></i> Connect Google
+      </button>
+      <!-- <button (click)="signInWithFacebook()" class="btn btn-block btn-facebook">
+            <i class="fa fa-facebook"></i> Connect Facebook
+          </button>
+          <button (click)="signInWithTwitter()" class="btn btn-block btn-twitter">
+            <i class="fa fa-facebook"></i> Connect Twitter
+          </button> -->
+    </div>
+  </div>
+  <!-- End Card -->
+
+  <div class="card mx-auto" *ngIf="!newUser">
+    <div class="card-header">
+      <i class="fa fa-lock"></i> User Login
+    </div>
+    <div class="card-body">
+      <form [formGroup]="userForm" (ngSubmit)="login()">
+        <div class="form-container">
+          <mat-form-field>
+            <input matInput placeholder="Email" type="email" id="email" class="form-control" formControlName="email" required>
+            <mat-error *ngIf="formErrors.email">
+              {{ formErrors.email }}
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder="Password" type="password" id="password" class="form-control" formControlName="password" required>
+            <mat-error *ngIf="formErrors.password">
+              {{ formErrors.password }}
+            </mat-error>
+          </mat-form-field>
+          <div class="submit">
+            <div class="ml-auto">
+              <button type="submit" value="Submit" mat-raised-button class="submit-button text-center" [disabled]="!userForm.valid">Submit</button>
+            </div>
+          </div>
+
+        </div>
+      </form>
+      <button class="btn btn-link btn-block" (click)="toggleForm()">Register for Access</button>
+    </div>
+    <div class="card-footer">
+      <div class="text-center">
+        <h4>Social Login</h4>
+      </div>
+      <button (click)="signInWithGoogle()" class="btn btn-block btn-google">
+        <i class="fa fa-google"></i> Connect Google
+      </button>
+      <!-- <button (click)="signInWithFacebook()" class="btn btn-block btn-facebook">
+        <i class="fa fa-facebook"></i> Connect Facebook
+      </button>
+      <button (click)="signInWithTwitter()" class="btn btn-block btn-twitter">
+        <i class="fa fa-facebook"></i> Connect Twitter
+      </button> -->
+    </div>
+  </div>
+  <!-- End Card -->
+
+</div>

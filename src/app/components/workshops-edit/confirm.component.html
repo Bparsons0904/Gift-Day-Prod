@@ -1,0 +1,12 @@
+<h1 mat-dialog-title>Confirm Deletion</h1>
+<h1 mat-dialog-title>Delete {{data.name}}?</h1>
+<mat-dialog-actions>
+  <div class="submit">
+    <div class="mr-auto">
+      <button mat-raised-button (click)="dialogRef.close(true)" class="delete-button text-center" tabindex="-1">Delete</button>
+    </div>
+    <div class="confirm-cancel">
+      <button mat-raised-button (click)="onNoClick()" class="submit-button text-center" tabindex="-1">Cancel</button>
+    </div>
+  </div>
+</mat-dialog-actions>

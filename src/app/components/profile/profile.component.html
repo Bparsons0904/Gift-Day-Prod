@@ -1,0 +1,112 @@
+<div class="box">
+  <div *ngIf="auth.user | async; then authenticated else guest">
+    <!-- template will replace this div -->
+  </div>
+</div>
+
+<!-- User NOT logged in -->
+<ng-template #guest class="box">
+  <h3>Howdy, GUEST</h3>
+  <p class="card-text">Login to get started...</p>
+  <button class="button" routerLink="/login">Login</button>
+</ng-template>
+
+<!-- User logged in -->
+<ng-template #authenticated>
+  <div *ngIf="auth.user | async as user">
+    <div *ngIf="!completeProfile" class="card mx-auto">
+      <div *ngIf="user.displayName" class="card-header">
+        {{user.displayName | titlecase }}'s Profile
+      </div>
+      <div *ngIf="!user.displayName">
+        Complete Profile
+      </div>
+      <div class="card-body">
+        <form #profileForm="ngForm" (ngSubmit)="onSubmit(profileForm)">
+          <div class="form-container">
+            <mat-form-field>
+              <input matInput placeholder="Full Name" type="text" class="form-control" name="displayName" #userDisplayName="ngModel" [ngClass]="{'is-invalid':userDisplayName.errors && userDisplayName.touched}"
+                [(ngModel)]="user.displayName" minlength="2" required>
+            </mat-form-field>
+            <mat-form-field>
+              <input matInput placeholder="School" type="text" class="form-control" name="school" #userSchool="ngModel" [ngClass]="{'is-invalid':userSchool.errors && userSchool.touched}"
+                [(ngModel)]="user.school" minlength="2" required>
+            </mat-form-field>
+            <mat-form-field>
+              <mat-select placeholder="Grade" class="form-control" name="grade" #userGrade="ngModel" [ngClass]="{'is-invalid':userGrade.errors && userGrade.touched}"
+                [(ngModel)]="user.grade" minlength="2" required>
+                <mat-option *ngFor="let grade of grades" [value]="grade.value">
+                  {{ grade.viewValue }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div class="submit">
+            <div class="mr-auto">
+              <button type="button" (click)="editProfile()" mat-raised-button class="cancel-button text-center">Cancel</button>
+            </div>
+            <div class="ml-auto">
+              <button type="submit" value="Submit" mat-raised-button class="submit-button text-center">Submit</button>
+            </div>
+          </div>
+
+        </form>
+      </div>
+    </div>
+    <div *ngIf="completeProfile">
+      <div class="card mx-auto">
+        <div class="card-header">
+          {{ user.displayName }}'s Profile
+        </div>
+        <div class="card-body">
+          <p>{{ user.grade }} at {{ user.school }}</p>
+        </div>
+        <div class="card-footer">
+          <div (click)="editProfile()" class="edit-profile text-center">
+            <button mat-mini-fab>
+              <mat-icon svgIcon="pencil"></mat-icon>
+            </button>
+            <span>Edit Profile</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- <button (click)="idcheck()" >Test Button</button> -->
+    <!-- <h3>Hello, {{ user.displayName }}</h3>
+    <img class="card-img-top" [src]="user.photoURL || 'https://api.adorable.io/avatars/109/fire.png'" width=50px>
+    <p class="text-truncate">UID: {{ user.uid }}</p>
+    <button class="button" (click)="logout()">Logout</button> -->
+
+    <!-- <div *ngIf="user.workshops.length > 0">
+      <div *ngFor="let workshop of user.workshops">
+        <p>{{ workshop }}</p>
+      </div>
+    </div> -->
+    <div class="card mx-auto">
+      <div class="card-header">
+        <p class="text-center">Registration Status</p>
+      </div>
+      <div class="card-body">
+        <h4 class="text-center">Session 1</h4>
+        <p *ngIf="workshop1" routerLink="/workshops/{{ workshop1.id }}">{{ workshop1.name }} in Room {{ workshop1.room }}</p>
+        <p *ngIf="!workshop1" routerLink="/workshops">View available Workshops</p>
+        <button mat-raised-button *ngIf="workshop1" class="registration-btn" (click)="deleteRegistration('1', workshop1.id)">Remove Registration</button>
+      </div>
+      <div class="card-body middle-section">
+        <h4 class="text-center">Session 2</h4>
+        <p *ngIf="workshop2" routerLink="/workshops/{{ workshop2.id }}">{{ workshop2.name }} in Room {{ workshop2.room }}</p>
+        <p *ngIf="!workshop2" routerLink="/workshops">View available Workshops</p>
+        <button mat-raised-button *ngIf="workshop2" class="registration-btn" (click)="deleteRegistration('2', workshop2.id)">Remove Registration</button>
+      </div>
+      <div class="card-body">
+        <h4 class="text-center">Session 3</h4>
+        <p *ngIf="workshop3" routerLink="/workshops/{{ workshop3.id }}">{{ workshop3.name }} in Room {{ workshop3.room }}</p>
+        <p *ngIf="!workshop3" routerLink="/workshops">View available Workshops</p>
+        <button mat-raised-button *ngIf="workshop3" class="registration-btn" (click)="deleteRegistration('3', workshop3.id)">Remove Registration</button>
+      </div>
+    </div>
+  </div>
+
+</ng-template>

@@ -1,0 +1,39 @@
+.learn {
+    margin-top: -25px;
+    color: var(--accent-blue)
+}
+
+.card {
+    margin-bottom: 20px;
+    min-width: 250px;
+}
+
+.card-header {
+    background-color: var(--main-orange);
+    color: white;
+    font-weight: bolder;
+    font-size: 1.25em;
+}
+
+.card-body {
+    background-color: var(--main-grey);
+}
+
+.card-body p {
+    font-size: 1.15em;
+}
+
+.header-body {
+    font-family: 'Lora', serif;
+    font-size: 1.25em;
+    margin: auto;
+    padding-bottom: 15px;
+}
+
+.header-title {
+    font-family: 'Lora', serif;
+    font-size: 2.5em;
+    font-weight: bold;
+    margin: auto;
+    color: var(--main-blue);
+}

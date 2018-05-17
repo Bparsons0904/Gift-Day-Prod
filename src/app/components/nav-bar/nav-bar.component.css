@@ -1,0 +1,14 @@
+.navbar-brand {
+    font-family: 'Lora', serif;
+    font-size: 2em;
+    color: white;
+    font-weight: bold;
+}
+
+.navbar {
+    background-color: var(--orange-dark);
+}
+
+.nav-item a {
+    color: white;
+}

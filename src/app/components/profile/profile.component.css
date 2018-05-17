@@ -1,0 +1,21 @@
+.registration-btn {
+    background-color: var(--main-blue);
+    color: white;
+    margin: 5px;
+    padding: 5px;
+    height: 45px;
+    width: 150px;
+}
+
+.middle-section {
+    background-color: var(--main-grey);
+}
+
+.edit-profile button {
+    background-color: var(--accent-purple);
+}
+
+.edit-profile span {
+    padding-left: 10px;
+    color: var(--accent-purple);
+}
