@@ -1,4 +1,247 @@
-<p>
-  workshops-home works!
-</p>
-<div *ngFor="let workshop of workshops">{{ workshop.name }}</div>
+<div class="container">
+  <div class="row">
+    <div class="header-title text-center">GIFT Day Workshops</div>
+    <div class="header-body"></div>
+  </div>
+  <div class="row">
+    <div class="text-center add-workshop">
+      <a *ngIf="admin" routerLink="/workshops/add">
+        <button mat-mini-fab>
+          <mat-icon svgIcon="plus"></mat-icon>
+        </button>
+        <span> Add New Workshop</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="card-deck justify-content-center">
+      <div class="card" *ngFor="let workshop of workshops">
+        <img class="img-fluid" src="{{ workshop.imageURL }}" alt="{{ workshop.name + 'image' }}" routerLink="/workshops/{{ workshop.id }}">
+        <div class="card-body" routerLink="/workshops/{{ workshop.id }}">
+          <div class="row">
+            <h3 class="card-text">
+              {{ workshop.name }}
+            </h3>
+            <hr>
+          </div>
+
+          <!-- <p class="card-text">{{ workshop.presenter.name }}</p> -->
+          <p class="card-text">
+            {{ (workshop.description.length > 200)? (workshop.description | slice:0:200) + '...':(workshop.description) }}
+          </p>
+        </div>
+        <div class="card-footer" routerLink="/workshops/{{ workshop.id }}">
+          <div>
+            <p class="availability text-center">Workshop Availability</p>
+          </div>
+          <div>
+            <mat-chip-list>
+              <div class="row">
+                <mat-chip [ngClass]="((workshop.session1.totalSeats - workshop.session1.registered.length) > 10) ? 'sessions col' : ((workshop.session1.totalSeats - workshop.session1.registered.length) == 0) ? 'sessions col session-out' : 'sessions col session-low'"
+                  routerLink="/workshops/{{ workshop.id }}">
+                  <p class="text-center">
+                    Session 1
+                  </p>
+                  <p class="text-center">
+                    {{ workshop.session1.totalSeats - workshop.session1.registered.length }}
+                  </p>
+                </mat-chip>
+                <mat-chip [ngClass]="((workshop.session2.totalSeats - workshop.session2.registered.length) > 10) ? 'sessions col' : ((workshop.session2.totalSeats
+                - workshop.session2.registered.length) == 0) ? 'sessions col session-out' : 'sessions col session-low'"
+                  routerLink="/workshops/{{ workshop.id }}">
+                  <p class="text-center">
+                    Session 2
+                  </p>
+                  <p class="text-center">
+                    {{ workshop.session2.totalSeats - workshop.session2.registered.length }}
+                  </p>
+                </mat-chip>
+                <mat-chip [ngClass]="((workshop.session3.totalSeats - workshop.session3.registered.length) > 10) ? 'sessions col' : ((workshop.session3.totalSeats
+                - workshop.session3.registered.length) == 0) ? 'sessions col session-out' : 'sessions col session-low'"
+                  routerLink="/workshops/{{ workshop.id }}">
+                  <p class="text-center">
+                    Session 3
+                  </p>
+                  <p class="text-center">
+                    {{ workshop.session3.totalSeats - workshop.session3.registered.length }}
+                  </p>
+                </mat-chip>
+              </div>
+
+
+            </mat-chip-list>
+          </div>
+        </div>
+
+        <div *ngIf="admin" class="card-footer">
+          <div class="row">
+            <div class="edit-workshop">
+              <a routerLink="/workshops/edit/{{ workshop.id }}">
+                <button mat-mini-fab>
+                  <mat-icon svgIcon="pencil"></mat-icon>
+                </button>
+                <span> Edit Workshop</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<ng-template #noWOrkshops>
+  <hr>
+  <h5>Sorry, currently there are no Workshops Available.</h5>
+  <h4>Check back soon, we will add workshops as they become available.</h4>
+</ng-template>
+
+<!-- <div class="container"> -->
+
+
+<!-- <div class="box">
+    <div *ngIf="tab; then fullSize else tabSize">
+
+    </div>
+  </div>
+
+  {{ tab }}
+
+  <ng-template #fullSize class="box">
+    <div class="row">
+      <div class="card-deck">
+        <div class="card" *ngFor="let workshop of workshops | slice:0:3">
+          <img class="img-fluid" src="{{ workshop.imageURL }}" alt="{{ workshop.name + 'image' }}">
+          <div class="card-body">
+            <h3 class="card-text">
+              {{ workshop.name }}
+            </h3>
+            <p class="card-text">{{ workshop.presenter }}</p>
+            <p class="card-text">
+              {{ (workshop.description.length > 200)? (workshop.description | slice:0:200) + '...':(workshop.description) }}
+            </p>
+          </div>
+          <div class="card-footer">
+            <div class="row">
+              <p class="class-muted mr-auto details">Workshop Details</p>
+              <p class="text-muted ml-auto available">Available Seats: {{ workshop.availableSeats }}</p>
+            </div>
+            <a *ngIf="admin" routerLink="/editworkshop/{{ workshop.id }}">Edit Workshops</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="row">
+      <div class="card-deck">
+        <div class="card" *ngFor="let workshop of workshops | slice:3:6">
+          <img class="img-fluid" src="{{ workshop.imageURL }}" alt="{{ workshop.name + 'image' }}">
+          <div class="card-body">
+            <h3 class="card-text">
+              {{ workshop.name }}
+            </h3>
+            <p class="card-text">{{ workshop.presenter }}</p>
+            <p class="card-text">
+              {{ (workshop.description.length > 200)? (workshop.description | slice:0:200) + '...':(workshop.description) }}
+            </p>
+          </div>
+          <div class="card-footer">
+            <div class="row">
+              <p class="class-muted mr-auto details">Workshop Details</p>
+              <p class="text-muted ml-auto available">Available Seats: {{ workshop.availableSeats }}</p>
+            </div>
+            <a *ngIf="admin" routerLink="/editworkshop/{{ workshop.id }}">Edit Workshops</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="row">
+      <div class="card-deck">
+        <div class="card" *ngFor="let workshop of workshops | slice:6:9">
+          <img class="img-fluid" src="{{ workshop.imageURL }}" alt="{{ workshop.name + 'image' }}">
+          <div class="card-body">
+            <h3 class="card-text">
+              {{ workshop.name }}
+            </h3>
+            <p class="card-text">{{ workshop.presenter }}</p>
+            <p class="card-text">
+              {{ (workshop.description.length > 200)? (workshop.description | slice:0:200) + '...':(workshop.description) }}
+            </p>
+          </div>
+          <div class="card-footer">
+            <div class="row">
+              <p class="class-muted mr-auto details">Workshop Details</p>
+              <p class="text-muted ml-auto available">Available Seats: {{ workshop.availableSeats }}</p>
+            </div>
+            <a *ngIf="admin" routerLink="/editworkshop/{{ workshop.id }}">Edit Workshops</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="row">
+      <div class="card-deck">
+        <div class="card" *ngFor="let workshop of workshops | slice:9:12">
+          <img class="img-fluid" src="{{ workshop.imageURL }}" alt="{{ workshop.name + 'image' }}">
+          <div class="card-body">
+            <h3 class="card-text">
+              {{ workshop.name }}
+            </h3>
+            <p class="card-text">{{ workshop.presenter }}</p>
+            <p class="card-text">
+              {{ (workshop.description.length > 200)? (workshop.description | slice:0:200) + '...':(workshop.description) }}
+            </p>
+          </div>
+          <div class="card-footer">
+            <div class="row">
+              <p class="class-muted mr-auto details">Workshop Details</p>
+              <p class="text-muted ml-auto available">Available Seats: {{ workshop.availableSeats }}</p>
+            </div>
+            <a *ngIf="admin" routerLink="/editworkshop/{{ workshop.id }}">Edit Workshops</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    
+  </ng-template>
+
+  <ng-template #tabSize class="box">
+    Tab size
+  </ng-template> -->
+
+
+<!-- </div> -->
+
+
+
+
+
+
+
+<!-- <table *ngIf="workshops?.length > 0; else noWorkshops" class="table table-striped">
+  <thead class="thead-inverse">
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Available Seats</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let workshop of workshops">
+      <td>{{ workshop.name}}</td>
+      <td>{{ workshop.presenter }}</td>
+      <td>{{ workshop.availableSeats }}</td>
+      <td>
+        <a routerLink="client/{{ client.id }}" class="btn btn-secondary btn-sm">
+          <i class="fa fa-arrow-circle-o-right"> Details</i>
+        </a>
+      </td>
+    </tr>
+  </tbody>
+</table> -->

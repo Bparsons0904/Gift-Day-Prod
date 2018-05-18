@@ -98,8 +98,10 @@ export class AuthService {
   emailSignUp(email: string, password: string) {
     return this.afAuth.auth.createUserWithEmailAndPassword(email, password)
       .then((user) => {
+        const subUser = user.user;
+        
         // this.notify.update('Welcome to Firestarter!!!', 'success');
-        return this.updateUserData(user); // if using firestore
+        return this.updateUserData(subUser); // if using firestore
       })
       .catch(err => {
         this.flashMessage.show(err.message, {
@@ -112,9 +114,11 @@ export class AuthService {
   emailLogin(email: string, password: string) {
     return this.afAuth.auth.signInWithEmailAndPassword(email, password)
       .then((user) => {
+        const subUser = user.user;
+        return this.updateUserData(subUser);
         // this.notify.update('Welcome to Firestarter!!!', 'success')
-        console.log(user);
-        this.setId(user.user.uid);
+        // console.log(user);
+        // this.setId(user.user.uid);
      //   return this.updateUserData(user); // if using firestore
       })
       .catch(err => {
@@ -155,9 +159,7 @@ export class AuthService {
   }
   // Sets user data to firestore after succesful login
   private updateUserData(user: User) {
-    
-    console.log(user);
-    
+
     const userRef: AngularFirestoreDocument<User> = this.afs.doc(`users/${user.uid}`);
 
     this.setId(user.uid);

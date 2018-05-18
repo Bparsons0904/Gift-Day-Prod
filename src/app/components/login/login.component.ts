@@ -6,6 +6,8 @@ import { ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angula
 import { UserService } from '../../services/user.service';
 import { User } from '../../models/user';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
+import { DomSanitizer } from '@angular/platform-browser';
 
 type UserFields = 'email' | 'password';
 type FormErrors = { [u in UserFields]: string };
@@ -44,8 +46,12 @@ export class LoginComponent implements OnInit {
     private fb: FormBuilder,
     private auth: AuthService,
     private router: Router,
-    private userService: UserService
-  ) { }
+    private userService: UserService,
+    private matIconRegistry: MatIconRegistry,
+    private domSanitizer: DomSanitizer
+  ) { 
+    matIconRegistry.addSvgIconSet(domSanitizer.bypassSecurityTrustResourceUrl('./assets/icons/mdi.svg'));
+  }
 
   ngOnInit() {
     this.buildForm();
@@ -72,7 +78,8 @@ export class LoginComponent implements OnInit {
   }
 
   signup() {
-    this.auth.emailSignUp(this.userForm.value['email'], this.userForm.value['password']).then(() => this.afterSignIn());
+    this.auth.emailSignUp(this.userForm.value['email'], this.userForm.value['password'])
+    .then(() => this.afterSignIn());
   }
 
   login() {
@@ -132,7 +139,7 @@ export class LoginComponent implements OnInit {
       if (this.user.admin) {
         this.userService.admin = true;
       }
-      if (this.user.displayName != "" && this.user.school != "" && this.user.grade != "") {
+      if ((this.user.displayName !== undefined) && (this.user.school !== undefined) && (this.user.grade !== undefined)) {
         this.router.navigate(['/']);
       } else {
         this.router.navigate(['/profile']);

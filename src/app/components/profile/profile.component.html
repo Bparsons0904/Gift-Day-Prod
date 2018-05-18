@@ -6,7 +6,7 @@
 
 <!-- User NOT logged in -->
 <ng-template #guest class="box">
-  <h3>Howdy, GUEST</h3>
+  <h3>Hello, GUEST</h3>
   <p class="card-text">Login to get started...</p>
   <button class="button" routerLink="/login">Login</button>
 </ng-template>
@@ -19,7 +19,9 @@
         {{user.displayName | titlecase }}'s Profile
       </div>
       <div *ngIf="!user.displayName">
-        Complete Profile
+        <div class="card-header">
+          Please Complete Profile
+        </div>
       </div>
       <div class="card-body">
         <form #profileForm="ngForm" (ngSubmit)="onSubmit(profileForm)">
@@ -43,9 +45,9 @@
           </div>
 
           <div class="submit">
-            <div class="mr-auto">
+            <!-- <div class="mr-auto">
               <button type="button" (click)="editProfile()" mat-raised-button class="cancel-button text-center">Cancel</button>
-            </div>
+            </div> -->
             <div class="ml-auto">
               <button type="submit" value="Submit" mat-raised-button class="submit-button text-center">Submit</button>
             </div>

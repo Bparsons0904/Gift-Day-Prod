@@ -1,0 +1,89 @@
+.header-body {
+    font-family: 'Lora', serif;
+    font-size: 1.5em;
+}
+
+
+.header-title {
+    font-family: 'Lora', serif;
+    font-size: 2.5em;
+    font-weight: bold;
+    color: var(--main-blue);
+    margin: auto;
+}
+
+.details {
+    margin-bottom: 0px;
+    padding-left: 10px;
+}
+
+.available {
+    margin-bottom: 0px;
+    padding-right: 10px;
+}
+
+.add-workshop button {
+    background-color: var(--accent-green);
+}
+
+.add-workshop a span {
+    padding-left: 10px;
+    color: var(--accent-green)
+}
+
+.add-workshop {
+    margin: auto;
+    padding-bottom: 15px;
+}
+
+.edit-workshop button {
+    background-color: var(--accent-purple);
+}
+
+.edit-workshop a span {
+    padding-left: 10px;
+    color: var(--accent-purple)
+}
+
+.edit-workshop {
+    margin: auto;
+}
+
+
+.sessions {
+    width: 125px;
+}
+
+.session-low {
+    background-color: var(--accent-yellow)!important;
+}
+
+.session-out {
+    background-color: var(--accent-red)!important;
+}
+
+.sessions p {
+    margin-bottom: 0px;
+}
+
+.mat-chip:not(.mat-basic-chip) {
+    display: inline;
+    font-size: .75em;
+    background-color: var(--accent-green);
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+.availability {
+    font-size: 1.5em;
+    color: var(--main-orange);
+    margin-bottom: 5px;
+}
+
+@media (min-width: 350px) { 
+    .mat-chip:not(.mat-basic-chip) {
+        font-size: 1em;
+    }
+ }
