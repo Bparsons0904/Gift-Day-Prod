@@ -1,3 +1,259 @@
-<p>
-  workshop-details works!
-</p>
+<div class="container">
+  <div class="row header">
+    <div class="col-md-2">
+      <div class="workshop-return">
+        <a routerLink="/workshops" class="btn btn btn-outline-info ">
+          <i class="fa fa-backward"></i> All Workshops
+        </a>
+      </div>
+    </div>
+    <div class="col-md-8 my-auto">
+      <div *ngIf="workshop" class="text-center workshop-header">
+        <h3>{{ workshop.name + " Workshop"}} </h3>
+      </div>
+    </div>
+    <div class="col-md-2"></div>
+  </div>
+  <div class="row" *ngIf="workshop">
+    <div class="col-md-6 col-lg-7 col-xl-8 order-md-12 workshop-image text-center">
+      <img class="img-fluid" src="{{ workshop?.imageURL }}" alt="{{ workshop.name + 'image' }}">
+    </div>
+    <div class="col-md-6 col-lg-5 col-xl-4 order-md-1 availability-card">
+
+      <div class="card">
+
+        <!-- <mat-accordion> -->
+        <mat-accordion multi="false" *mqIf="'(min-width: 768px)'">
+          <div class="presenter text-center">
+            <p>Presented by:</p>
+          </div>
+
+          <mat-expansion-panel *ngIf="presenter1" (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <div *ngIf="!panelOpenState">{{ presenter1.name }}</div>
+                <div class="click-close">{{panelOpenState ? 'Click to close' : ''}}</div>
+
+              </mat-panel-title>
+              <mat-panel-description>
+                <mat-icon class="ml-auto my-auto">person</mat-icon>
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <div class="row">
+              <div class="card mx-auto presenter-card">
+                <img class="img-fluid" src="{{ presenter1.imageURL }}" alt="">
+                <div class="card-header">
+                  <h2>{{ presenter1.name }}</h2>
+                </div>
+                <div class="card-body">
+                  <h5>
+                    {{ presenter1.occupation }}
+                    <span *ngIf="presenter1.currentEmployer"> at </span>{{ presenter1.currentEmployer }}
+                  </h5>
+                  <p>{{ (presenter1.bio.length > 200)? (presenter1.bio | slice:0:200) + '...':(presenter1.bio) }}</p>
+                  <a routerLink="/presenters/{{ presenter1.id }}">Learn more about {{ presenter1.name }}</a>
+                </div>
+              </div>
+            </div>
+
+          </mat-expansion-panel>
+
+          <mat-expansion-panel *ngIf="presenter2" (opened)="panelOpenState2 = true" (closed)="panelOpenState2 = false">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <div *ngIf="!panelOpenState2">{{ presenter2.name }}</div>
+                <div class="click-close">{{panelOpenState2 ? 'Click to close' : ''}}</div>
+
+              </mat-panel-title>
+              <mat-panel-description>
+                <mat-icon class="ml-auto my-auto">person</mat-icon>
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <div class="row">
+              <div class="card mx-auto presenter-card">
+                <img class="img-fluid" src="{{ presenter2.imageURL }}" alt="">
+                <div class="card-header">
+                  <h2>{{ presenter2.name }}</h2>
+                </div>
+                <div class="card-body">
+                  <h5>
+                    {{ presenter2.occupation }}
+                    <span *ngIf="presenter2.currentEmployer"> at </span>{{ presenter2.currentEmployer }}
+                  </h5>
+                  <p>{{ (presenter2.bio.length > 200)? (presenter2.bio | slice:0:200) + '...':(presenter2.bio) }}</p>
+                  <a routerLink="/presenters/{{ presenter2.id }}">Learn more about {{ presenter2.name }}</a>
+                </div>
+              </div>
+            </div>
+          </mat-expansion-panel>
+        </mat-accordion>
+
+        <div class="card-footer">
+          <div class="availability-chip mx-auto">
+            <mat-chip-list>
+              <div class="row mx-auto availability">
+                <p>Workshop Availability</p>
+              </div>
+              <div class="row mx-auto availability-chips">
+                <mat-chip [ngClass]="((workshop.session1.totalSeats - workshop.session1.registered.length) > 10) ? 'sessions col' : ((workshop.session1.totalSeats - workshop.session1.registered.length) == 0) ? 'sessions col session-out' : 'sessions col session-low'"
+                  routerLink="/workshops/{{ workshop.id }}">
+                  <p class="text-center">
+                    Session 1
+                  </p>
+                  <p class="text-center">
+                    {{ workshop.session1.totalSeats - workshop.session1.registered.length }}
+                  </p>
+                </mat-chip>
+                <mat-chip [ngClass]="((workshop.session2.totalSeats - workshop.session2.registered.length) > 10) ? 'sessions col' : ((workshop.session2.totalSeats - workshop.session2.registered.length) == 0) ? 'sessions col session-out' : 'sessions col session-low'"
+                  routerLink="/workshops/{{ workshop.id }}">
+                  <p class="text-center">
+                    Session 2
+                  </p>
+                  <p class="text-center">
+                    {{ workshop.session2.totalSeats - workshop.session2.registered.length }}
+                  </p>
+                </mat-chip>
+                <mat-chip [ngClass]="((workshop.session3.totalSeats - workshop.session3.registered.length) > 10) ? 'sessions col' : ((workshop.session3.totalSeats -  workshop.session3.registered.length) == 0) ? 'sessions col session-out' : 'sessions col session-low'"
+                  routerLink="/workshops/{{ workshop.id }}">
+                  <p class="text-center">
+                    Session 3
+                  </p>
+                  <p class="text-center">
+                    {{ workshop.session3.totalSeats - workshop.session3.registered.length }}
+                  </p>
+                </mat-chip>
+              </div>
+
+
+            </mat-chip-list>
+            <div class="text-center">
+              <a *ngIf="uid == null" class="login-notice text-center" routerLink="/login">Please Login to Register for Workshops.</a>
+            </div>
+          </div>
+
+
+        </div>
+        <!-- <p class="presenters">Presented by: <span *ngIf="presenter1" routerLink="/presenters/{{ presenter1.id }}">{{ presenter1.name }}</span></p>
+            <p *ngIf="presenter2" routerLink="/presenters/{{ presenter2.id }}">{{ presenter2.name }}</p> -->
+
+
+
+
+
+
+
+
+      </div>
+      <!-- End Card -->
+
+    </div>
+    <!-- End Col  -->
+
+
+  </div>
+  <!-- End Top Row -->
+
+  <div class="row">
+    <div class="workshop-description">
+      <p>{{ workshop?.description }}</p>
+    </div>
+  </div>
+
+  <!-- <mat-accordion> -->
+  <mat-accordion multi="false" *mqIf="'(max-width: 767px)'">
+    <div class="presenter text-center">
+      <p>Presented by:</p>
+    </div>
+
+    <mat-expansion-panel *ngIf="presenter1" (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <div *ngIf="!panelOpenState">{{ presenter1.name }}</div>
+          <div class="click-close">{{panelOpenState ? 'Click to close' : ''}}</div>
+
+        </mat-panel-title>
+        <mat-panel-description>
+          <mat-icon class="ml-auto my-auto">person</mat-icon>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div class="row">
+        <div class="card mx-auto presenter-card">
+          <img class="img-fluid" src="{{ presenter1.imageURL }}" alt="">
+          <div class="card-header">
+            <h2>{{ presenter1.name }}</h2>
+          </div>
+          <div class="card-body">
+            <h5>
+              {{ presenter1.occupation }}
+              <span *ngIf="presenter1.currentEmployer"> at </span>{{ presenter1.currentEmployer }}
+            </h5>
+            <p>{{ (presenter1.bio.length > 200)? (presenter1.bio | slice:0:200) + '...':(presenter1.bio) }}</p>
+            <a routerLink="/presenters/{{ presenter1.id }}">Learn more about {{ presenter1.name }}</a>
+          </div>
+        </div>
+      </div>
+
+    </mat-expansion-panel>
+
+    <mat-expansion-panel *ngIf="presenter2" (opened)="panelOpenState2 = true" (closed)="panelOpenState2 = false">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <div *ngIf="!panelOpenState2">{{ presenter2.name }}</div>
+          <div class="click-close">{{panelOpenState2 ? 'Click to close' : ''}}</div>
+
+        </mat-panel-title>
+        <mat-panel-description>
+          <mat-icon class="ml-auto my-auto">person</mat-icon>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div class="row">
+        <div class="card mx-auto presenter-card">
+          <img class="img-fluid" src="{{ presenter2.imageURL }}" alt="">
+          <div class="card-header">
+            <h2>{{ presenter2.name }}</h2>
+          </div>
+          <div class="card-body">
+            <h5>
+              {{ presenter2.occupation }}
+              <span *ngIf="presenter2.currentEmployer"> at </span>{{ presenter2.currentEmployer }}
+            </h5>
+            <p>{{ (presenter2.bio.length > 200)? (presenter2.bio | slice:0:200) + '...':(presenter2.bio) }}</p>
+            <a routerLink="/presenters/{{ presenter2.id }}">Learn more about {{ presenter2.name }}</a>
+          </div>
+        </div>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>
+
+
+  <div class="text-center">
+    <a *ngIf="uid == null" class="login-notice text-center" routerLink="/login">Please Login to Register for Workshops.</a>
+  </div>
+
+  <div class="row" *ngIf="uid != null">
+    <div class="text-center reg-button-grp">
+      <div class="button-row">
+        <button mat-raised-button class="registration-btn" (click)="workshopRegister('1')" [disabled]="registered || registered1 || (workshop.session1.totalSeats - workshop.session1.registered.length) < 1">Register for Session 1</button>
+        <button mat-raised-button class="registration-btn" (click)="workshopRegister('2')" [disabled]="registered || registered2 || (workshop.session2.totalSeats - workshop.session2.registered.length) < 1">Register for Session 2</button>
+        <button mat-raised-button class="registration-btn" (click)="workshopRegister('3')" [disabled]="registered || registered3 || (workshop.session3.totalSeats - workshop.session3.registered.length) < 1">Register for Session 3</button>
+        <button mat-raised-button class="registration-btn" (click)="deleteRegistration()" [disabled]="!registered">Remove Registration</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="bottom-back-button" class="workshop-return">
+    <a routerLink="/workshops" class="btn btn btn-outline-info ">
+      <i class="fa fa-backward"></i> All Workshops
+    </a>
+  </div>
+
+
+  <!-- <div *ngIf="workshop">
+    <div *ngIf="registered">
+      <p *ngFor="let register in registered">{{ register }}</p>
+      Test
+    </div>
+  
+    
+  </div> -->
+</div>

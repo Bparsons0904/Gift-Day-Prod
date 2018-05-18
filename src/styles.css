@@ -100,9 +100,9 @@ progress::-webkit-progress-value {
 }
 
 .card-header {
-    background-color: var(--main-orange);
+    background-color: var(--main-orange)!important;
     color: white;
-    font-weight: bolder;
+    font-weight: bolder!important;
 }
 
 .card-body {

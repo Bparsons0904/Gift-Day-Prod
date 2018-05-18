@@ -1,3 +1,88 @@
-<p>
-  workshops-edit works!
-</p>
+<div>
+  <div class="card mx-auto">
+    <div class="card-header">
+      Edit Workshop
+    </div>
+    <div class="card-body">
+      <form #workshopForm="ngForm" (ngSubmit)="onSubmit(workshopForm)">
+        <div class="form-container">
+          <mat-form-field>
+            <input matInput placeholder="Workshop Name" type="text" class="form-control" name="name" #workshopName="ngModel" [ngClass]="{'is-invalid':workshopName.errors && workshopName.touched}"
+              [(ngModel)]="workshop.name" minlength="2" required>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-select placeholder="Primary Presenter" type="text" name="presenter1" #presenter1="ngModel" [ngClass]="{'is-invalid':presenter1.errors && presenter1.touched}"
+              [(ngModel)]="workshop.presenter1" minlength="2" required>
+              <mat-option *ngFor="let presenter of presenters" [value]="presenter.id">{{ presenter.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-select placeholder="Assistant Presenter" type="text" name="presenter2" #presenter2="ngModel" [ngClass]="{'is-invalid':presenter2.errors && presenter2.touched}"
+              [(ngModel)]="workshop.presenter2" minlength="2">
+              <mat-option *ngFor="let presenter of presenters" [value]="presenter.id">{{ presenter.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field>
+            <textarea matInput matTextareaAutosize matAutosizeMinRows="2" matAutosizeMaxRows="10" placeholder="Workshop Description"
+              type="text" class="form-control" [ngClass]="{'is-invalid':workshopDescription.errors && workshopDescription.touched}"
+              [(ngModel)]="workshop.description" name="description" #workshopDescription="ngModel" minlength="10" required></textarea>
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder="Room" type="text" class="form-control" [ngClass]="{'is-invalid':workshopRoom.errors && workshopRoom.touched}"
+              [(ngModel)]="workshop.room" name="room" #workshopRoom="ngModel" minlength="3">
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder="Session 1 Total Seats" type="text" class="form-control" [(ngModel)]="workshop.session1.totalSeats"
+              name="totalSeats">
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder="Session 2 Total Seats" type="text" class="form-control" [(ngModel)]="workshop.session2.totalSeats"
+              name="totalSeats">
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder="Session 3 Total Seats" type="text" class="form-control" [(ngModel)]="workshop.session3.totalSeats"
+              name="totalSeats">
+          </mat-form-field>
+  
+  
+  
+          <mat-form-field>
+            <input matInput placeholder="Workshop Image" type="string" class="form-control" [(ngModel)]="workshop.imageURL" name="imageURL"
+              #workshopImageURL="ngModel">
+          </mat-form-field>
+  
+          <div class="dropzone" dropZone (hovered)="toggleHover($event)" (dropped)="startUpload($event)" [class.hovering]="isHovering">
+            <div class="file">
+              <label class="file-label">
+                <input class="file-input" type="file" (change)="startUpload($event.target.files)">
+              </label>
+            </div>
+          </div>
+  
+          <div *ngIf="percentage | async as pct">
+  
+            <progress class="progress is-info" [value]="pct" max="100">
+            </progress>
+          </div>
+  
+          <div *ngIf="snapshot | async as snap">
+            <p *ngIf="!isActive(snap) && downloadURL">Upload Complete</p>
+          </div>
+        </div>
+        <!-- End Material Form -->
+  
+  
+        <div class="submit">
+          <div class="mr-auto">
+            <button type="button" (click)="openDialog()" mat-raised-button class="delete-button text-center">Delete</button>
+          </div>
+          <div class="ml-auto">
+            <button type="submit" value="Submit" mat-raised-button class="submit-button text-center">Submit</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
