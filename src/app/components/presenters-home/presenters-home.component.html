@@ -1,3 +1,63 @@
-<p>
-  presenters-home works!
-</p>
+<div class="container">
+  <!-- <div class="row text-center">
+    <div class="header-title">GIFT Day Presenters</div>
+    <div class="header-body"></div>
+    <a *ngIf="admin" routerLink="/presenters/add">Add Presenters</a>
+  </div> -->
+
+  <div class="row">
+    <div class="header-title text-center">GIFT Day Presenters</div>
+    <div class="header-body"></div>
+  </div>
+  <div class="row">
+    <div class="text-center add-workshop">
+      <a *ngIf="admin" routerLink="/presenters/add">
+        <button mat-mini-fab>
+          <mat-icon svgIcon="plus"></mat-icon>
+        </button>
+        <span> Add New Presenter</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="row" *ngIf="presenters?.length > 0; else noPresenters">
+    <div class="card-deck justify-content-center">
+      <div class="card" *ngFor="let presenter of presenters" routerLink="/presenters/{{ presenter.id }}">
+        <img class="img-fluid" src="{{ presenter.imageURL }}" alt="{{ presenter.name + 'image' }}">
+        <div class="card-body">
+          <h3 class="card-text">{{ presenter.name }}</h3>
+          <p class="card-text">{{ presenter.occupation }}
+            <span *ngIf="presenter.currentEmployer"> at </span>{{ presenter.currentEmployer }}</p>
+          <p class="card-text">
+            {{ (presenter.bio.length > 200)? (presenter.bio | slice:0:200) + '...':(presenter.bio) }}
+          </p>
+        </div>
+
+        <!-- <div class="card-footer">
+          <div class="row">
+            <p class="class-muted mr-auto details" routerLink="/presenters/{{ presenter.id }}">Learn more about {{ presenter.name }}</p>
+          </div>
+        </div> -->
+
+        <div *ngIf="admin" class="card-footer">
+          <div class="row">
+            <div class="edit-workshop">
+              <a routerLink="/presenters/edit/{{ presenter.id }}">
+                <button mat-mini-fab>
+                  <mat-icon svgIcon="pencil"></mat-icon>
+                </button>
+                <span> Edit Presenter</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <ng-template #noPresenters>
+    <hr>
+    <h5>Sorry, currently there are no Presenters.</h5>
+  </ng-template>
+</div>

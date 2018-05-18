@@ -1,0 +1,119 @@
+.bio-image {
+    padding-left: 0px;
+    padding-right: 0px;
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+.bio-image img {
+    width: 100%;
+}
+
+.bio {
+    padding: 20px;
+}
+
+.bio-header h1 {
+    color: var(--main-blue);
+}
+.bio-header p {
+    font-size: 20px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+.bio-header a {
+    font-size: 20px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.workshop-return a {
+    color: var(--main-orange);
+    border-color: var(--main-orange);
+}
+
+.sessions {
+    width: 125px;
+}
+
+.session-low {
+    background-color: var(--accent-yellow)!important;
+}
+
+.session-out {
+    background-color: var(--accent-red)!important;
+}
+
+.sessions p {
+    margin-bottom: 0px;
+}
+
+.mat-chip:not(.mat-basic-chip) {
+    display: inline;
+    font-size: 1em;
+    background-color: var(--accent-green);
+}
+
+.availability-chip p {
+    font-size: 1em;
+    margin: 0px;
+}
+
+.availability {
+    margin-top: 0px;
+    font-size: 1.5em;
+    color: var(--main-orange);
+}
+
+.availability-card {
+    padding: 0px;
+}
+
+.availability-chips {
+    padding-top: 5px;
+    width: 100%;
+}
+
+.card {
+    max-width: 400px;
+    margin-right: 0px;
+    margin-left: 0px;
+}
+
+.card-body {
+    background-color: var(--main-grey);
+}
+
+.card-footer {
+    /* background-color: var(--main-blue); */
+    padding-bottom: 5px;
+    padding-top: 5px;
+    background-color: white;
+}
+
+.header-title {
+    font-family: 'Lora', serif;
+    font-size: 2.5em;
+    font-weight: bold;
+    color: var(--main-blue);
+    margin: auto;
+}
+
+
+@media (min-width: 576px) { 
+    .bio-image img {
+        max-width: 360px;
+    }
+    .bio-image {
+        margin-top: 5px;
+    }
+    .bio-header h1 {
+        margin-bottom: 20px;
+    }
+    .bio-header p {
+        margin-top: 10px;
+    }
+    .bio-header a {
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+ }

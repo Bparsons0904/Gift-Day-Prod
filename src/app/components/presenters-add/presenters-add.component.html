@@ -1,3 +1,199 @@
-<p>
-  presenters-add works!
-</p>
+<div class="card mx-auto">
+  <div class="card-header text-center">
+    Add Presenter
+  </div>
+  <div class="card-body">
+    <form #presenterForm="ngForm" (ngSubmit)="onSubmit(presenterForm)">
+      <div class="form-container">
+        <mat-form-field>
+          <input matInput placeholder="Presenter Name" type="text" class="form-control" name="name" #presenterName="ngModel" [ngClass]="{'is-invalid':presenterName.errors && presenterName.touched}"
+            [(ngModel)]="presenter.name" minlength="2" required>
+          <!-- <div [hidden]="!presenterName.errors?.required" class="invalid-feedback ml-auto">
+            Presenter Name Required
+          </div>
+          <div [hidden]="!presenterName.errors?.minlength" class="invalid-feedback ml-auto">
+            Must be at least 2 characters
+          </div> -->
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput placeholder="Current Position" type="text" class="form-control" name="occupation" #presenterOccupation="ngModel"
+            [ngClass]="{'is-invalid':presenterOccupation.errors && presenterOccupation.touched}" [(ngModel)]="presenter.occupation"
+            minlength="2" required>
+          <!-- <div [hidden]="!presenterOccupation.errors?.required" class="invalid-feedback">
+            Occupation Required
+          </div>
+          <div [hidden]="!presenterOccupation.errors?.minlength" class="invalid-feedback">
+            Must be at least 2 characters
+          </div> -->
+        </mat-form-field>
+        <mat-form-field>
+          <textarea matInput matTextareaAutosize matAutosizeMinRows="2" matAutosizeMaxRows="10" placeholder="Presenter Bio" type="text"
+            class="form-control" [ngClass]="{'is-invalid':presenterBio.errors && presenterBio.touched}" [(ngModel)]="presenter.bio"
+            name="bio" #presenterBio="ngModel" minlength="10" required></textarea>
+          <!-- <div [hidden]="!presenterBio.errors?.required" class="invalid-feedback">
+            Bio is required
+          </div>
+          <div [hidden]="!presenterBio.errors?.minlength" class="invalid-feedback">
+            Bio must be at least 10 characters
+          </div> -->
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput placeholder="Email" type="text" class="form-control" name="email" #presenterEmail="ngModel" [ngClass]="{'is-invalid':presenterEmail.errors && presenterEmail.touched}"
+            [(ngModel)]="presenter.email" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$">
+          <!-- <div [hidden]="!presenterEmail.errors?.required" class="invalid-feedback">
+            Email Required
+          </div>
+          <div [hidden]="!presenterEmail.errors?.pattern" class="invalid-feedback">
+            Email is not valid.
+          </div> -->
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput placeholder="Education" type="text" class="form-control" [ngClass]="{'is-invalid':presenterEducation.errors && presenterEducation.touched}"
+            [(ngModel)]="presenter.education" name="education" #presenterEducation="ngModel" minlength="3">
+          <!-- <div [hidden]="!presenterEducation.errors?.required" class="invalid-feedback">
+            Education is required
+          </div>
+          <div [hidden]="!presenterEducation.errors?.minlength" class="invalid-feedback">
+            Education must be at least 3 characters
+          </div> -->
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput placeholder="Current Employer" type="text" class="form-control" [ngClass]="{'is-invalid':presenterCurrentEmployer.errors && presenterCurrentEmployer.touched}"
+            [(ngModel)]="presenter.currentEmployer" name="currentEmployer" #presenterCurrentEmployer="ngModel" minlength="3">
+          <!-- <div [hidden]="!presenterCurrentEmployer.errors?.required" class="invalid-feedback">
+            CurrentEmployer is required
+          </div>
+          <div [hidden]="!presenterCurrentEmployer.errors?.minlength" class="invalid-feedback">
+            Employer must be at least 3 characters
+          </div> -->
+        </mat-form-field>
+        <mat-form-field>
+          <!-- <div class="form-group">
+            
+          </div> -->
+          <input matInput placeholder="Presenter Image" type="string" class="form-control" [(ngModel)]="presenter.imageURL" name="imageURL"
+            #presenterImageURL="ngModel">
+        </mat-form-field>
+
+        <div class="dropzone" dropZone (hovered)="toggleHover($event)" (dropped)="startUpload($event)" [class.hovering]="isHovering">
+          <div class="file">
+            <label class="file-label">
+              <input class="file-input" type="file" (change)="startUpload($event.target.files)">
+            </label>
+          </div>
+        </div>
+
+        <div *ngIf="percentage | async as pct">
+
+          <progress class="progress is-info" [value]="pct" max="100">
+          </progress>
+        </div>
+
+        <div *ngIf="snapshot | async as snap">
+          <p *ngIf="!isActive(snap) && downloadURL">Upload Complete</p>
+        </div>
+        <div class="ml-auto submit">
+          <button type="submit" value="Submit" mat-raised-button class="submit-button ml-auto text-center">Submit</button>
+        </div>
+      </div>
+
+
+      <!-- <div class="form-group">
+        <label for="name">Presenter Name</label>
+        <input type="text" class="form-control" name="name" #presenterName="ngModel" [ngClass]="{'is-invalid':presenterName.errors && presenterName.touched}" [(ngModel)]="presenter.name" minlength="2" required>
+        <div [hidden]="!presenterName.errors?.required" class="invalid-feedback">
+          Presenter Name Required
+        </div>
+        <div [hidden]="!presenterName.errors?.minlength" class="invalid-feedback">
+          Must be at least 2 characters
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="occupation">Current Position</label>
+        <input type="text" class="form-control" name="occupation" #presenterOccupation="ngModel" [ngClass]="{'is-invalid':presenterOccupation.errors && presenterOccupation.touched}" [(ngModel)]="presenter.occupation" minlength="2" required>
+        <div [hidden]="!presenterOccupation.errors?.required" class="invalid-feedback">
+          Occupation Required
+        </div>
+        <div [hidden]="!presenterOccupation.errors?.minlength" class="invalid-feedback">
+          Must be at least 2 characters
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="bio">Presenter Bio</label>
+        <input type="text" class="form-control" [ngClass]="{'is-invalid':presenterBio.errors && presenterBio.touched}" [(ngModel)]="presenter.bio"
+          name="bio" #presenterBio="ngModel" minlength="10" required>
+        <div [hidden]="!presenterBio.errors?.required" class="invalid-feedback">
+          Bio is required
+        </div>
+        <div [hidden]="!presenterBio.errors?.minlength" class="invalid-feedback">
+          Bio must be at least 10 characters
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="text" class="form-control" name="email" #presenterEmail="ngModel" [ngClass]="{'is-invalid':presenterEmail.errors && presenterEmail.touched}"
+          [(ngModel)]="presenter.email" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$">
+        <div [hidden]="!presenterEmail.errors?.required" class="invalid-feedback">
+          Email Required
+        </div>
+        <div [hidden]="!presenterEmail.errors?.pattern" class="invalid-feedback">
+          Email is not valid.
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="education">Education</label>
+        <input type="text" class="form-control" [ngClass]="{'is-invalid':presenterEducation.errors && presenterEducation.touched}" [(ngModel)]="presenter.education"
+          name="education" #presenterEducation="ngModel" minlength="3">
+        <div [hidden]="!presenterEducation.errors?.required" class="invalid-feedback">
+          Education is required
+        </div>
+        <div [hidden]="!presenterEducation.errors?.minlength" class="invalid-feedback">
+          Education must be at least 3 characters
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="currentEmployer">Current Employer</label>
+        <input type="text" class="form-control" [ngClass]="{'is-invalid':presenterCurrentEmployer.errors && presenterCurrentEmployer.touched}" [(ngModel)]="presenter.currentEmployer"
+          name="currentEmployer" #presenterCurrentEmployer="ngModel" minlength="3">
+        <div [hidden]="!presenterCurrentEmployer.errors?.required" class="invalid-feedback">
+          CurrentEmployer is required
+        </div>
+        <div [hidden]="!presenterCurrentEmployer.errors?.minlength" class="invalid-feedback">
+          Employer must be at least 3 characters
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="imageURL">Presenter Image</label>
+        <input type="string" class="form-control" [(ngModel)]="presenter.imageURL" name="imageURL" #presenterImageURL="ngModel">
+      </div>
+
+      <div class="dropzone" dropZone (hovered)="toggleHover($event)" (dropped)="startUpload($event)" [class.hovering]="isHovering">
+        <div class="file">
+          <label class="file-label">
+            <input class="file-input" type="file" (change)="startUpload($event.target.files)">
+          </label>
+        </div>
+      </div>
+      
+      <div *ngIf="percentage | async as pct">
+      
+        <progress class="progress is-info" [value]="pct" max="100">
+        </progress>
+        <p>{{ pct | number }}%</p>
+      </div>
+      
+      <div *ngIf="snapshot | async as snap">
+        <p *ngIf="!isActive(snap) && downloadURL">Upload Complete</p>
+      </div>
+
+      <input type="submit" value="Submit" class="btn btn-primary btn-block"> -->
+
+    </form>
+  </div>
+</div>
