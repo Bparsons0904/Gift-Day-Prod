@@ -11,6 +11,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { Inject } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-presenters-edit',
@@ -36,7 +37,7 @@ export class PresentersEditComponent implements OnInit {
   downloadURL: Observable<string>;
   isHovering: boolean;
   imageURL: string;
-
+  uploadPercent: Observable<number>;
   name: string;
 
   constructor(
@@ -106,6 +107,69 @@ export class PresentersEditComponent implements OnInit {
     this.isHovering = event;
   }
 
+  uploadFile(event) {
+    const file = event.target.files[0];
+    const filePath = `media/images/workshops/${new Date().getTime()}_${file.name}`;
+    const fileRef = this.storage.ref(filePath);
+    const task = this.storage.upload(filePath, file);
+
+    if (file.type.split('/')[0] !== 'image') {
+      console.error('unsupported file type :( ')
+      return;
+    }
+    // observe percentage changes
+    this.uploadPercent = task.percentageChanges();
+    // get notified when the download URL is available
+
+    // this.percentage = this.task.percentageChanges();
+    // this.snapshot = this.task.snapshotChanges();
+
+
+    task.snapshotChanges().pipe(
+      finalize(() => {
+        this.downloadURL = fileRef.getDownloadURL();
+        this.downloadURL.subscribe(downloadURL => {
+          this.presenter.imageURL = downloadURL;
+        });
+      })
+    )
+      .subscribe();
+
+    // task.snapshotChanges().pipe(
+    //   finalize(() => {
+    //     this.downloadURL = fileRef.getDownloadURL(); 
+    //   })
+    // )
+    // .subscribe();
+
+
+    // function doAsyncTask() {
+    //   return new Promise((resolve, reject) => {
+    //     console.log("Promise ran");
+
+    //     task.snapshotChanges().pipe(
+    //       finalize(() => this.downloadURL = fileRef.getDownloadURL())
+    //     )
+    //       .subscribe();
+    //   });
+    // }
+
+    // doAsyncTask().then(
+    //   () => this.downloadURL.subscribe(downloadURL => {
+    //     console.log(downloadURL);
+
+    //     this.presenter.imageURL = downloadURL;
+    //   }),
+    //   (err) => console.error(err)
+    // );
+    // this.downloadURL.subscribe(downloadURL => {
+    //   this.imageURL = downloadURL;
+    // })
+    // this.downloadURL.subscribe(imageURL => {
+    //   this.imageURL = imageURL;
+    //   this.presenter.imageURL = this.imageURL;
+    // });
+  }
 
   startUpload(event: FileList) {
     // The File object

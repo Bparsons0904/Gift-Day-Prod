@@ -2,6 +2,10 @@
   <div class="card-header text-center">
     Add Presenter
   </div>
+  <!-- <input type="file" (change)="uploadFile($event)" />
+  <div>{{ uploadPercent | async }}</div>
+  <a [href]="downloadURL | async">{{ downloadURL | async }}</a>
+  <button (click)="test()">Test Button</button> -->
   <div class="card-body">
     <form #presenterForm="ngForm" (ngSubmit)="onSubmit(presenterForm)">
       <div class="form-container">
@@ -71,27 +75,28 @@
           <!-- <div class="form-group">
             
           </div> -->
+          <!-- <input matInput placeholder="Presenter Image" type="string" class="form-control" [(ngModel)]="presenter.imageURL" name="imageURL"
+            #presenterImageURL="ngModel"> -->
           <input matInput placeholder="Presenter Image" type="string" class="form-control" [(ngModel)]="presenter.imageURL" name="imageURL"
             #presenterImageURL="ngModel">
         </mat-form-field>
 
-        <div class="dropzone" dropZone (hovered)="toggleHover($event)" (dropped)="startUpload($event)" [class.hovering]="isHovering">
-          <div class="file">
-            <label class="file-label">
-              <input class="file-input" type="file" (change)="startUpload($event.target.files)">
-            </label>
-          </div>
+        <div class="file">
+          <label class="file-label">
+            <input class="file-input" type="file" (change)="uploadFile($event)">
+          </label>
         </div>
 
-        <div *ngIf="percentage | async as pct">
+        <div *ngIf="uploadPercent | async as pct">
 
           <progress class="progress is-info" [value]="pct" max="100">
           </progress>
+          <p *ngIf="pct == 100">Upload Complete</p>
         </div>
 
-        <div *ngIf="snapshot | async as snap">
+        <!-- <div *ngIf="snapshot | async as snap">
           <p *ngIf="!isActive(snap) && downloadURL">Upload Complete</p>
-        </div>
+        </div> -->
         <div class="ml-auto submit">
           <button type="submit" value="Submit" mat-raised-button class="submit-button ml-auto text-center">Submit</button>
         </div>

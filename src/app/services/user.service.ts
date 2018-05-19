@@ -17,7 +17,7 @@ export class UserService {
   users: Observable<User[]>;
   user: Observable<User>;
   completeProfile: boolean = false;
-  admin: boolean = false;
+  admin: boolean = true;
 
   constructor(
     private afs: AngularFirestore

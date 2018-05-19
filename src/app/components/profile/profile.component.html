@@ -64,14 +64,6 @@
         <div class="card-body">
           <p>{{ user.grade }} at {{ user.school }}</p>
         </div>
-        <div class="card-footer">
-          <div (click)="editProfile()" class="edit-profile text-center">
-            <button mat-mini-fab>
-              <mat-icon svgIcon="pencil"></mat-icon>
-            </button>
-            <span>Edit Profile</span>
-          </div>
-        </div>
       </div>
     </div>
 
@@ -87,8 +79,8 @@
       </div>
     </div> -->
     <div class="card mx-auto">
-      <div class="card-header">
-        <p class="text-center">Registration Status</p>
+      <div class="card-header text-center">
+        Registration Status
       </div>
       <div class="card-body">
         <h4 class="text-center">Session 1</h4>
@@ -110,5 +102,17 @@
       </div>
     </div>
   </div>
+
+  <div class="card" *ngIf="completeProfile">
+    <div class="card-footer">
+      <div (click)="editProfile()" class="edit-profile text-center">
+        <button mat-mini-fab>
+          <mat-icon svgIcon="pencil"></mat-icon>
+        </button>
+        <span>Edit Profile</span>
+      </div>
+    </div>
+  </div>
+  
 
 </ng-template>

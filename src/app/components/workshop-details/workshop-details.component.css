@@ -168,6 +168,11 @@
     width: 100%;
 } */
 
+.registered-session {
+    color: var(--main-blue);
+    padding-top: 15px;
+}
+
 @media (min-width: 576px) { 
     /* .workshop-image img {
         margin-top: auto;

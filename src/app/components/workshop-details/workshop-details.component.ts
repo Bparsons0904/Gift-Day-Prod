@@ -34,6 +34,7 @@ export class WorkshopDetailsComponent implements OnInit {
   registered1: boolean;
   registered2: boolean;
   registered3: boolean;
+  currentRegistration: number;
   registeredSession: string;
   userRegisteredPosition: number;
   user: User;
@@ -55,6 +56,8 @@ export class WorkshopDetailsComponent implements OnInit {
    }
 
   ngOnInit() {
+    console.log(this.registered);
+    
     this.registered = false;
     // this.uid = this.auth.getAuthID();
     this.id = this.route.snapshot.params['id'];
@@ -70,6 +73,11 @@ export class WorkshopDetailsComponent implements OnInit {
               const element = this.user.workshops[i];
               if (element != null) {
                 this["registered" + (i + 1)] = true;
+              }
+              if (element == this.id) {
+                this.currentRegistration = i + 1;
+              } else {
+                this.currentRegistration = null;
               }
             }
           });

@@ -16,6 +16,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { Inject } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-workshops-edit',
@@ -57,7 +58,8 @@ export class WorkshopsEditComponent implements OnInit {
   downloadURL: Observable<string>;
   isHovering: boolean;
   imageURL: string;
-
+  uploadPercent: Observable<number>;
+  
   constructor(
     private wss: WorkshopsService,
     private router: Router,
@@ -127,6 +129,29 @@ export class WorkshopsEditComponent implements OnInit {
     this.isHovering = event;
   }
 
+  uploadFile(event) {
+    const file = event.target.files[0];
+    const filePath = `media/images/workshops/${new Date().getTime()}_${file.name}`;
+    const fileRef = this.storage.ref(filePath);
+    const task = this.storage.upload(filePath, file);
+
+    if (file.type.split('/')[0] !== 'image') {
+      console.error('unsupported file type :( ')
+      return;
+    }
+
+    this.uploadPercent = task.percentageChanges();
+
+    task.snapshotChanges().pipe(
+      finalize(() => {
+        this.downloadURL = fileRef.getDownloadURL();
+        this.downloadURL.subscribe(downloadURL => {
+          this.workshop.imageURL = downloadURL;
+        });
+      })
+    )
+      .subscribe();
+  }
 
   startUpload(event: FileList) {
     // The File object
