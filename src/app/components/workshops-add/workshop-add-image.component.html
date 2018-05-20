@@ -1,0 +1,17 @@
+<h1 mat-dialog-title>Image Upload</h1>
+<mat-dialog-content>
+    <input type="file" (change)="fileChangeEvent($event)" />
+    
+    <image-cropper [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="true" [aspectRatio]="4 / 3" [resizeToWidth]="0"
+        format="jpg" (imageCropped)="imageCropped($event)" (imageLoaded)="imageLoaded()" (loadImageFailed)="loadImageFailed()"></image-cropper>
+    
+    <img [src]="croppedImage" />
+</mat-dialog-content>
+<mat-dialog-actions>
+
+    <button (click)="dialogRef.close(croppedImage)" type="submit" value="upload" mat-raised-button class="submit-button ml-auto text-center">Upload Photo</button>
+    <!-- <button mat-raised-button (click)="dialogRef.close(croppedImage)" class="delete-button text-center" tabindex="-1">Close</button> -->
+<!-- <label class="file-label">
+    <input class="file-input" type="file" (clicl)="uploadFile($event)">
+</label> -->
+</mat-dialog-actions>

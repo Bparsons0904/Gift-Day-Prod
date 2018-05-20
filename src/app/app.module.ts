@@ -33,7 +33,7 @@ import { LoginComponent } from './components/login/login.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { WorkshopsHomeComponent } from './components/workshops-home/workshops-home.component';
 import { WorkshopsEditComponent, ConfirmComponent } from './components/workshops-edit/workshops-edit.component';
-import { WorkshopsAddComponent } from './components/workshops-add/workshops-add.component';
+import { WorkshopsAddComponent, WorkshopAddImageComponent } from './components/workshops-add/workshops-add.component';
 import { WorkshopDetailsComponent } from './components/workshop-details/workshop-details.component';
 import { PresentersDetailsComponent } from './components/presenters-details/presenters-details.component';
 import { PresentersAddComponent } from './components/presenters-add/presenters-add.component';
@@ -52,6 +52,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { ImageCropperModule } from 'ngx-image-cropper';
+import { ImageCropperComponent, CropperSettings } from "ngx-img-cropper";
 
 @NgModule({
   declarations: [
@@ -72,6 +74,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     ConfirmComponent,
     WorkshopDetailsComponent,
     PresentersDetailsComponent,
+    WorkshopAddImageComponent,
+    ImageCropperComponent
   ],
   imports: [
     BrowserModule,
@@ -95,9 +99,10 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatSelectModule,
     BrowserAnimationsModule,
     HttpClientModule,
+    ImageCropperModule,
   ],
   entryComponents: [
-    DialogConfirmComponent, ConfirmComponent,
+    DialogConfirmComponent, ConfirmComponent, WorkshopAddImageComponent,
   ],
   providers: [AuthService, UserService, WorkshopsService, PresenterService, NotifyService],
   bootstrap: [AppComponent]
