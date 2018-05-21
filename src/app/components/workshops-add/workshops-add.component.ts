@@ -19,7 +19,6 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Inject } from '@angular/core';
 import { ImageCropperModule } from 'ngx-image-cropper';
-// import * as _ from 'base64-img';
 
 @Component({
   selector: 'app-workshops-add',
@@ -116,7 +115,6 @@ export class WorkshopsAddComponent implements OnInit {
   }
 
   uploadFile(event) {
-    console.log(event);
     const file = event;
     // const file = event.target.files[0];
     // console.log(file);
@@ -131,7 +129,7 @@ export class WorkshopsAddComponent implements OnInit {
     }
 
     this.uploadPercent = task.percentageChanges();
-
+    
     task.snapshotChanges().pipe(
       finalize(() => {
         this.downloadURL = fileRef.getDownloadURL();
@@ -171,8 +169,8 @@ export class WorkshopsAddComponent implements OnInit {
 
   openDialog(): void {
     let dialogRef = this.dialog.open(WorkshopAddImageComponent, {
-      height: '90%',
-      width: '99%',
+      height: '95%',
+      width: '95%',
       disableClose: false,
       // data: { fileInfo: this.fileInfo }
     });
@@ -212,6 +210,8 @@ export class WorkshopsAddComponent implements OnInit {
 })
 export class WorkshopAddImageComponent {
 
+  aspect: string = " 4 / 3"
+
   constructor(
     public dialogRef: MatDialogRef<WorkshopAddImageComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any) { }
@@ -222,6 +222,8 @@ export class WorkshopAddImageComponent {
 
   imageChangedEvent: any = '';
   croppedImage: any = '';
+  imageRotation: number = 0;
+  imageFinishedLoading: boolean;
 
   fileChangeEvent(event: any): void {
     this.imageChangedEvent = event;
@@ -231,9 +233,66 @@ export class WorkshopAddImageComponent {
   }
   imageLoaded() {
     // show cropper
-    
+    this.imageFinishedLoading = true;
   }
   loadImageFailed() {
     // show message
+  }
+
+  rotateImages() {
+    // if (this.imageRotation != 270) {
+    //   this.imageRotation += 90;
+    // } else {
+    //   this.imageRotation = 0;
+    // }
+    // console.log(this.imageRotation);
+    // var image = document.getElementsByClassName("source-image");
+    // image[0].className = "source-image degree90"
+    // console.log(image);
+    var image = document.getElementsByClassName("source-image");
+    image["0"].src = this.rotateBase64Image90deg(image["0"].currentSrc);
+    this.croppedImage = this.rotateBase64Image90deg(this.croppedImage);
+  }
+
+  getRotation() {
+    var image = document.getElementsByClassName("source-image");
+    var result = 'rotate(' + this.imageRotation + 'deg)'
+    console.log(image);
+    image[0].className = "source-image degree90"
+    return result;
+  }
+
+  rotateBase64Image90deg(base64Image) {
+    // create an off-screen canvas
+    var offScreenCanvas = document.createElement('canvas');
+    var offScreenCanvasCtx = offScreenCanvas.getContext('2d');
+    var image = document.getElementsByClassName("source-image");
+    console.log(image);
+    
+    // cteate Image
+    var img = new Image();
+    img.src = base64Image;
+
+    // set its dimension to rotated size
+    offScreenCanvas.height = img.width;
+    offScreenCanvas.width = img.height;
+
+    // rotate and draw source image into the off-screen canvas:
+    offScreenCanvasCtx.rotate(90 * Math.PI / 180);
+    offScreenCanvasCtx.translate(0, -offScreenCanvas.width);
+    // if (isClockwise) {
+    //   offScreenCanvasCtx.rotate(90 * Math.PI / 180);
+    //   offScreenCanvasCtx.translate(0, -offScreenCanvas.width);
+    // } 
+    // else {
+    //   offScreenCanvasCtx.rotate(-90 * Math.PI / 180);
+    //   offScreenCanvasCtx.translate(-offScreenCanvas.height, 0);
+    // }
+    offScreenCanvasCtx.drawImage(img, 0, 0);
+
+    // encode image to data-uri with base64
+    return offScreenCanvas.toDataURL("image/jpeg", 100);
+    // this.croppedImage = offScreenCanvas.toDataURL("image/jpeg", 100);
+
   }
 }

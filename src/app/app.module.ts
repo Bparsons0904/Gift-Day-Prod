@@ -53,7 +53,6 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ImageCropperModule } from 'ngx-image-cropper';
-import { ImageCropperComponent, CropperSettings } from "ngx-img-cropper";
 
 @NgModule({
   declarations: [
@@ -75,7 +74,6 @@ import { ImageCropperComponent, CropperSettings } from "ngx-img-cropper";
     WorkshopDetailsComponent,
     PresentersDetailsComponent,
     WorkshopAddImageComponent,
-    ImageCropperComponent
   ],
   imports: [
     BrowserModule,
