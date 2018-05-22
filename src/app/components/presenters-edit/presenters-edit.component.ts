@@ -12,6 +12,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { Inject } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { finalize } from 'rxjs/operators';
+import { ImageCropperModule } from 'ngx-image-cropper';
 
 @Component({
   selector: 'app-presenters-edit',
@@ -39,6 +40,8 @@ export class PresentersEditComponent implements OnInit {
   imageURL: string;
   uploadPercent: Observable<number>;
   name: string;
+  myBlob: Blob;
+  fileInfo: Observable<any>;
 
   constructor(
     private presenterService: PresenterService,
@@ -108,7 +111,7 @@ export class PresentersEditComponent implements OnInit {
   }
 
   uploadFile(event) {
-    const file = event.target.files[0];
+    const file = event;
     const filePath = `media/images/workshops/${new Date().getTime()}_${file.name}`;
     const fileRef = this.storage.ref(filePath);
     const task = this.storage.upload(filePath, file);
@@ -117,13 +120,8 @@ export class PresentersEditComponent implements OnInit {
       console.error('unsupported file type :( ')
       return;
     }
-    // observe percentage changes
+
     this.uploadPercent = task.percentageChanges();
-    // get notified when the download URL is available
-
-    // this.percentage = this.task.percentageChanges();
-    // this.snapshot = this.task.snapshotChanges();
-
 
     task.snapshotChanges().pipe(
       finalize(() => {
@@ -134,107 +132,50 @@ export class PresentersEditComponent implements OnInit {
       })
     )
       .subscribe();
-
-    // task.snapshotChanges().pipe(
-    //   finalize(() => {
-    //     this.downloadURL = fileRef.getDownloadURL(); 
-    //   })
-    // )
-    // .subscribe();
-
-
-    // function doAsyncTask() {
-    //   return new Promise((resolve, reject) => {
-    //     console.log("Promise ran");
-
-    //     task.snapshotChanges().pipe(
-    //       finalize(() => this.downloadURL = fileRef.getDownloadURL())
-    //     )
-    //       .subscribe();
-    //   });
-    // }
-
-    // doAsyncTask().then(
-    //   () => this.downloadURL.subscribe(downloadURL => {
-    //     console.log(downloadURL);
-
-    //     this.presenter.imageURL = downloadURL;
-    //   }),
-    //   (err) => console.error(err)
-    // );
-    // this.downloadURL.subscribe(downloadURL => {
-    //   this.imageURL = downloadURL;
-    // })
-    // this.downloadURL.subscribe(imageURL => {
-    //   this.imageURL = imageURL;
-    //   this.presenter.imageURL = this.imageURL;
-    // });
   }
 
-  startUpload(event: FileList) {
-    // The File object
-    const file = event.item(0)
-
-    // Client-side validation example
-    if (file.type.split('/')[0] !== 'image') {
-      console.error('unsupported file type :( ')
-      return;
+  dataURItoBlob(dataURI) {
+    var binary = atob(dataURI.split(',')[1]);
+    var array = [];
+    for (var i = 0; i < binary.length; i++) {
+      array.push(binary.charCodeAt(i));
     }
-
-    // The storage path
-    const path = `media/images/workshops/${new Date().getTime()}_${file.name}`;
-
-    // Totally optional metadata
-    const customMetadata = { app: 'GIFT Day App' };
-
-    // The main task
-    this.task = this.storage.upload(path, file, { customMetadata })
-
-    // Progress monitoring
-    this.percentage = this.task.percentageChanges();
-    this.snapshot = this.task.snapshotChanges()
-
-    // this.percentage = this.task.percentageChanges();
-    // this.snapshot   = this.task.snapshotChanges().pipe(
-    //   tap(snap => {
-    //     console.log(snap)
-    //     if (snap.bytesTransferred === snap.totalBytes) {
-    //       this.db.collection('photos').add( { path, size: snap.totalBytes })
-    //     }
-    //   })
-    // )
-
-    // The file's download URL
-    // this.downloadURL = this.task.downloadURL();
-
-    this.downloadURL.subscribe(imageURL => {
-      // Path for production
-      // this.imageURL = path;
-
-      // Path for testing
-      this.imageURL = imageURL;
-      this.presenter.imageURL = this.imageURL;
-      // console.log(this.imageURL);
-
+    return new Blob([new Uint8Array(array)], {
+      type: 'image/jpg'
     });
-    // console.log(this.downloadURL);
-
-    // this.workshop.imageURL = String(this.downloadURL);
   }
 
+  blobToFile = (theBlob: Blob, fileName: string): File => {
+    var b: any = theBlob;
+    b.lastModifiedDate = new Date();
+    b.name = fileName;
 
-
-  // Determines if the upload task is active
-  isActive(snapshot) {
-    return snapshot.state === 'running' && snapshot.bytesTransferred < snapshot.totalBytes
+    return <File>theBlob;
   }
+
+  openDialogUpload(): void {
+    let dialogRef = this.dialog.open(PresentersEditImageComponent, {
+      height: '95%',
+      width: '95%',
+      disableClose: false,
+    });
+
+    dialogRef.afterClosed().subscribe(croppedImage => {
+      if (croppedImage) {
+        var myBlob: Blob = this.dataURItoBlob(croppedImage);
+        let myFile = new File([myBlob], "workshop-image.jpg", { type: 'image/jpeg' });
+        this.uploadFile(myFile);
+      }
+      dialogRef = null;
+    });
+  };
 
 }
 
 @Component({
   selector: 'app-dialog-confirm',
   templateUrl: './dialog-confirm.component.html',
-  styleUrls: ['./dialog-confirm.component.css']
+  styles: []
 })
 export class DialogConfirmComponent {
 
@@ -244,6 +185,44 @@ export class DialogConfirmComponent {
 
   onNoClick(): void {
     this.dialogRef.close();
+  }
+
+}
+
+@Component({
+  selector: 'app-presenters-edit-image',
+  templateUrl: './presenters-edit-image.component.html',
+  styles: []
+})
+export class PresentersEditImageComponent {
+
+  aspect: string = " 4 / 3"
+
+  constructor(
+    public dialogRef: MatDialogRef<PresentersEditImageComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any) { }
+
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+
+  imageChangedEvent: any = '';
+  croppedImage: any = '';
+  imageRotation: number = 0;
+  imageFinishedLoading: boolean;
+
+  fileChangeEvent(event: any): void {
+    this.imageChangedEvent = event;
+  }
+  imageCropped(image: string) {
+    this.croppedImage = image;
+  }
+  imageLoaded() {
+    // show cropper
+    this.imageFinishedLoading = true;
+  }
+  loadImageFailed() {
+    // show message
   }
 
 }

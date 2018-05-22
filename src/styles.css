@@ -124,4 +124,14 @@ progress::-webkit-progress-value {
 .mat-dialog-container {
     margin: auto;
     max-width: 450px;
+    padding: 15px!important;
 }
+
+.mat-dialog-content {
+    max-height: 95vh!important;
+    max-width: 435px;
+}
+
+.mat-dialog-content input {
+    width: 100%;
+} 

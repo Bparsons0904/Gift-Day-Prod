@@ -32,12 +32,12 @@ import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { LoginComponent } from './components/login/login.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { WorkshopsHomeComponent } from './components/workshops-home/workshops-home.component';
-import { WorkshopsEditComponent, ConfirmComponent } from './components/workshops-edit/workshops-edit.component';
+import { WorkshopsEditComponent, ConfirmComponent, WorkshopEditImageComponent } from './components/workshops-edit/workshops-edit.component';
 import { WorkshopsAddComponent, WorkshopAddImageComponent } from './components/workshops-add/workshops-add.component';
 import { WorkshopDetailsComponent } from './components/workshop-details/workshop-details.component';
 import { PresentersDetailsComponent } from './components/presenters-details/presenters-details.component';
-import { PresentersAddComponent } from './components/presenters-add/presenters-add.component';
-import { PresentersEditComponent, DialogConfirmComponent } from './components/presenters-edit/presenters-edit.component';
+import { PresentersAddComponent, PresentersAddImageComponent } from './components/presenters-add/presenters-add.component';
+import { PresentersEditComponent, DialogConfirmComponent, PresentersEditImageComponent } from './components/presenters-edit/presenters-edit.component';
 import { PresentersHomeComponent } from './components/presenters-home/presenters-home.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 
@@ -74,6 +74,9 @@ import { ImageCropperModule } from 'ngx-image-cropper';
     WorkshopDetailsComponent,
     PresentersDetailsComponent,
     WorkshopAddImageComponent,
+    WorkshopEditImageComponent,
+    PresentersEditImageComponent,
+    PresentersAddImageComponent
   ],
   imports: [
     BrowserModule,
@@ -100,7 +103,7 @@ import { ImageCropperModule } from 'ngx-image-cropper';
     ImageCropperModule,
   ],
   entryComponents: [
-    DialogConfirmComponent, ConfirmComponent, WorkshopAddImageComponent,
+    DialogConfirmComponent, ConfirmComponent, WorkshopAddImageComponent, WorkshopEditImageComponent, PresentersEditImageComponent, PresentersAddImageComponent
   ],
   providers: [AuthService, UserService, WorkshopsService, PresenterService, NotifyService],
   bootstrap: [AppComponent]

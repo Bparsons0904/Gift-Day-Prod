@@ -54,9 +54,7 @@
           </mat-form-field>
   
           <div class="file">
-            <label class="file-label">
-              <input class="file-input" type="file" (change)="uploadFile($event)">
-            </label>
+            <button type="button" value="open" (click)="openDialogUpload()" mat-raised-button class="submit-button ml-auto text-center">Select Photo</button>
           </div>
           
           <div *ngIf="uploadPercent | async as pct">

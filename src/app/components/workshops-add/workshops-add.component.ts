@@ -162,35 +162,12 @@ export class WorkshopsAddComponent implements OnInit {
     return <File>theBlob;
   }
 
-  setFileName(test1, test2) {
-    console.log(test1, test2);
-
-  }
-
   openDialog(): void {
     let dialogRef = this.dialog.open(WorkshopAddImageComponent, {
       height: '95%',
       width: '95%',
       disableClose: false,
-      // data: { fileInfo: this.fileInfo }
     });
-
-    // dialogRef.afterClosed().subscribe(croppedImage => {
-    //   if (croppedImage) {
-    //     this.myBlob = this.dataURItoBlob(croppedImage);
-    //     let myFile = new File([this.myBlob], "workshop-image.jpg", { type: 'image/jpeg' });
-        
-    //   }
-
-    // }, imageChangeEvent => {
-    //   console.log("image change started");
-      
-    //     var fileName = imageChangeEvent.target.files[0].name;
-    //     let myFile = new File([this.myBlob], fileName, { type: 'image/jpeg' });
-    //     this.uploadFile(myFile);
-    //     dialogRef = null;
-    //   }
-    // )};
 
     dialogRef.afterClosed().subscribe(croppedImage => {
       if (croppedImage) {
@@ -206,7 +183,7 @@ export class WorkshopsAddComponent implements OnInit {
 @Component({
   selector: 'app-workshop-add-image',
   templateUrl: './workshop-add-image.component.html',
-  styleUrls: ['./workshop-add-image.component.css']
+  styles: []
 })
 export class WorkshopAddImageComponent {
 
@@ -237,62 +214,5 @@ export class WorkshopAddImageComponent {
   }
   loadImageFailed() {
     // show message
-  }
-
-  rotateImages() {
-    // if (this.imageRotation != 270) {
-    //   this.imageRotation += 90;
-    // } else {
-    //   this.imageRotation = 0;
-    // }
-    // console.log(this.imageRotation);
-    // var image = document.getElementsByClassName("source-image");
-    // image[0].className = "source-image degree90"
-    // console.log(image);
-    var image = document.getElementsByClassName("source-image");
-    image["0"].src = this.rotateBase64Image90deg(image["0"].currentSrc);
-    this.croppedImage = this.rotateBase64Image90deg(this.croppedImage);
-  }
-
-  getRotation() {
-    var image = document.getElementsByClassName("source-image");
-    var result = 'rotate(' + this.imageRotation + 'deg)'
-    console.log(image);
-    image[0].className = "source-image degree90"
-    return result;
-  }
-
-  rotateBase64Image90deg(base64Image) {
-    // create an off-screen canvas
-    var offScreenCanvas = document.createElement('canvas');
-    var offScreenCanvasCtx = offScreenCanvas.getContext('2d');
-    var image = document.getElementsByClassName("source-image");
-    console.log(image);
-    
-    // cteate Image
-    var img = new Image();
-    img.src = base64Image;
-
-    // set its dimension to rotated size
-    offScreenCanvas.height = img.width;
-    offScreenCanvas.width = img.height;
-
-    // rotate and draw source image into the off-screen canvas:
-    offScreenCanvasCtx.rotate(90 * Math.PI / 180);
-    offScreenCanvasCtx.translate(0, -offScreenCanvas.width);
-    // if (isClockwise) {
-    //   offScreenCanvasCtx.rotate(90 * Math.PI / 180);
-    //   offScreenCanvasCtx.translate(0, -offScreenCanvas.width);
-    // } 
-    // else {
-    //   offScreenCanvasCtx.rotate(-90 * Math.PI / 180);
-    //   offScreenCanvasCtx.translate(-offScreenCanvas.height, 0);
-    // }
-    offScreenCanvasCtx.drawImage(img, 0, 0);
-
-    // encode image to data-uri with base64
-    return offScreenCanvas.toDataURL("image/jpeg", 100);
-    // this.croppedImage = offScreenCanvas.toDataURL("image/jpeg", 100);
-
   }
 }
