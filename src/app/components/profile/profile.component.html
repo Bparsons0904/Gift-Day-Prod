@@ -56,16 +56,7 @@
         </form>
       </div>
     </div>
-    <div *ngIf="completeProfile">
-      <div class="card mx-auto">
-        <div class="card-header">
-          {{ user.displayName }}'s Profile
-        </div>
-        <div class="card-body">
-          <p>{{ user.grade }} at {{ user.school }}</p>
-        </div>
-      </div>
-    </div>
+    
 
     <!-- <button (click)="idcheck()" >Test Button</button> -->
     <!-- <h3>Hello, {{ user.displayName }}</h3>
@@ -103,13 +94,21 @@
     </div>
   </div>
 
-  <div class="card" *ngIf="completeProfile">
-    <div class="card-footer">
-      <div (click)="editProfile()" class="edit-profile text-center">
-        <button mat-mini-fab>
-          <mat-icon svgIcon="pencil"></mat-icon>
-        </button>
-        <span>Edit Profile</span>
+  <div *ngIf="completeProfile">
+    <div class="card mx-auto">
+      <div class="card-header">
+        {{ user.displayName }}'s Profile
+      </div>
+      <div class="card-body">
+        <p>{{ user.grade }} at {{ user.school }}</p>
+      </div>
+      <div class="card-footer">
+        <div (click)="editProfile()" class="edit-profile text-center">
+          <button mat-mini-fab>
+            <mat-icon svgIcon="pencil"></mat-icon>
+          </button>
+          <span>Edit Profile</span>
+        </div>
       </div>
     </div>
   </div>

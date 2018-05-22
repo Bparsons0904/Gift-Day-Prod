@@ -56,9 +56,6 @@ export class WorkshopDetailsComponent implements OnInit {
    }
 
   ngOnInit() {
-    console.log(this.registered);
-    
-    this.registered = false;
     // this.uid = this.auth.getAuthID();
     this.id = this.route.snapshot.params['id'];
     this.wss.getWorkshop(this.id).subscribe(workshop => {

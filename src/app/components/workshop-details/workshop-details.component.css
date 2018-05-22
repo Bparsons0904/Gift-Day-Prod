@@ -78,7 +78,7 @@
 
 .mat-chip:not(.mat-basic-chip) {
     display: inline;
-    font-size: 1em;
+    font-size: .75em;
     background-color: var(--accent-green);
 }
 
@@ -122,7 +122,6 @@
 }
 
 .card-header h2 {
-    color: var(--main-orange);
     margin-bottom: 0px;
 }
 
@@ -209,5 +208,11 @@
 @media (min-width: 1200px) { 
     .sessions {
         width: 150px;
+    }
+ }
+
+ @media (min-width: 350px) { 
+    .mat-chip[_ngcontent-c2]:not(.mat-basic-chip) {
+        font-size: 1em;
     }
  }

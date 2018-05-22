@@ -82,6 +82,15 @@ a:hover {
     margin-bottom: 5px;
 }
 
+.card {
+    min-width: 292px;
+}
+
+.container-fluid {
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
 @media (min-width: 350px) { 
     .mat-chip:not(.mat-basic-chip) {
         font-size: 1em;
