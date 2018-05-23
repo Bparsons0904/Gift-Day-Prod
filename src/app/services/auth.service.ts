@@ -169,14 +169,14 @@ export class AuthService {
         uid: user.uid,
         email: user.email || null,
         displayName: user.displayName,
-        workshops: [],
+        workshops: [null, null, null],
       };
       return userRef.set(data, { merge: true });
     } else {
       const data: User = {
         uid: user.uid,
         email: user.email || null,
-        workshops: [],
+        workshops: [null, null, null],
       };
       return userRef.set(data, { merge: true });
     }

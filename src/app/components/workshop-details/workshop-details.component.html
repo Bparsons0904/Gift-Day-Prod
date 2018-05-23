@@ -232,12 +232,7 @@
 
   <div class="row" *ngIf="uid != null">
     <div class="text-center reg-button-grp">
-      <div *ngIf="currentRegistration" class="registered-session">
-        <h5>You are registered for Session {{ currentRegistration }}</h5>
-        <div class="text-center">
-          <a  class="login-notice text-center" routerLink="/profile">Check Profile for current registered Workshops.</a>
-        </div>
-      </div>
+
 
       <div class="button-row">
         <button mat-raised-button class="registration-btn" (click)="workshopRegister('1')" [disabled]="registered || registered1 || (workshop.session1.totalSeats - workshop.session1.registered.length) < 1">Register for Session 1</button>
@@ -245,6 +240,14 @@
         <button mat-raised-button class="registration-btn" (click)="workshopRegister('3')" [disabled]="registered || registered3 || (workshop.session3.totalSeats - workshop.session3.registered.length) < 1">Register for Session 3</button>
         <button mat-raised-button class="registration-btn" (click)="deleteRegistration()" [disabled]="!registered">Remove Registration</button>
       </div>
+
+      <div *ngIf="currentRegistration" class="registered-session">
+        <h5>You are registered for Session {{ currentRegistration }}</h5>
+        <div class="text-center">
+          <a class="login-notice text-center" routerLink="/profile">Check Profile for current registered Workshops.</a>
+        </div>
+      </div>
+      
     </div>
   </div>
 
