@@ -20,7 +20,7 @@
     </div>
     <div class="col-md-6 col-lg-5 col-xl-4 order-md-1 availability-card">
 
-      <div class="card">
+      <div class="card mx-auto">
 
         <!-- <mat-accordion> -->
         <mat-accordion multi="false" *mqIf="'(min-width: 768px)'">
@@ -234,6 +234,9 @@
     <div class="text-center reg-button-grp">
       <div *ngIf="currentRegistration" class="registered-session">
         <h5>You are registered for Session {{ currentRegistration }}</h5>
+        <div class="text-center">
+          <a  class="login-notice text-center" routerLink="/profile">Check Profile for current registered Workshops.</a>
+        </div>
       </div>
 
       <div class="button-row">

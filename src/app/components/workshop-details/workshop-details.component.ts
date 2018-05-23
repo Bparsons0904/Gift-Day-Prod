@@ -73,9 +73,10 @@ export class WorkshopDetailsComponent implements OnInit {
               }
               if (element == this.id) {
                 this.currentRegistration = i + 1;
-              } else {
-                this.currentRegistration = null;
               }
+              // } else {
+              //   this.currentRegistration = null;
+              // }
             }
           });
           if (this.workshop.session1.registered.indexOf(this.uid) > -1) {
@@ -176,6 +177,7 @@ export class WorkshopDetailsComponent implements OnInit {
     this.user.workshops.splice(this.user.workshops.indexOf(this.id), 1, null);
 
     this.userService.removeUserRegistration(this.user);
+    this.currentRegistration = null;
     // console.log(this.workshop['session' + this.registeredSession].registered, this.user.workshops, this.registered);
   }
 

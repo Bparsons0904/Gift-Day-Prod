@@ -1,6 +1,6 @@
 <mat-dialog-content>
     <input type="file" (change)="fileChangeEvent($event)" />
-    <image-cropper [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="true" [aspectRatio]="4 / 3" [imageQuality]="90" [resizeToWidth]="0"vformat="jpg" (imageCropped)="imageCropped($event)" (imageLoaded)="imageLoaded()" (loadImageFailed)="loadImageFailed()"></image-cropper>
+    <image-cropper [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="true" [aspectRatio]="4 / 3" [imageQuality]="92" [resizeToWidth]="0"vformat="jpg" (imageCropped)="imageCropped($event)" (imageLoaded)="imageLoaded()" (loadImageFailed)="loadImageFailed()"></image-cropper>
     <h3 class="text-center" *ngIf="imageFinishedLoading">Image Preview</h3>
     <img class="img-preview img-fluid" [src]="croppedImage" />
 </mat-dialog-content>
