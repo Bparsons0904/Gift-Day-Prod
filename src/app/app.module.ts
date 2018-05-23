@@ -7,10 +7,14 @@ import { HttpClientModule } from '@angular/common/http';
 
 
 import { environment } from '../environments/environment';
-import { AngularFireModule } from 'angularfire2';
+import {
+  AngularFireModule, FirebaseOptionsToken,
+  FirebaseAppNameToken,
+  FirebaseAppConfigToken } from 'angularfire2';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AngularFireStorageModule } from 'angularfire2/storage';
+
 // import { firebase } from '@firebase/app';
 import * as firebase from 'firebase';
 // firebase.initializeApp(environment.firebase);
@@ -24,7 +28,6 @@ import { PresenterService } from './services/presenter.service';
 import { NotifyService } from './services/notify.service';
 
 import { FlashMessagesModule } from 'angular2-flash-messages';
-import { DropzoneDirective } from './directives/dropzone.directive';
 import { MqIfDirective } from './directives/mq-if.directive';
 
 import { HomeComponent } from './components/home/home.component';
@@ -83,7 +86,7 @@ import { Ng2ImgMaxModule } from 'ng2-img-max';
     BrowserModule,
     AppRoutingModule,
     FlashMessagesModule.forRoot(),
-    AngularFireModule.initializeApp(environment.firebase),
+    AngularFireModule,
     AngularFirestoreModule,
     AngularFireAuthModule,
     FormsModule,
@@ -107,7 +110,7 @@ import { Ng2ImgMaxModule } from 'ng2-img-max';
   entryComponents: [
     DialogConfirmComponent, ConfirmComponent, WorkshopAddImageComponent, WorkshopEditImageComponent, PresentersEditImageComponent, PresentersAddImageComponent
   ],
-  providers: [AuthService, UserService, WorkshopsService, PresenterService, NotifyService],
+  providers: [{ provide: FirebaseOptionsToken, useValue: environment.firebase }, AuthService, UserService, WorkshopsService, PresenterService, NotifyService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
