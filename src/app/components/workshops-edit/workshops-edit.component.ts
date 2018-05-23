@@ -18,6 +18,7 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { ImageCropperModule } from 'ngx-image-cropper';
 
 import { finalize } from 'rxjs/operators';
+import { Ng2ImgMaxService } from 'ng2-img-max';
 
 @Component({
   selector: 'app-workshops-edit',
@@ -63,6 +64,7 @@ export class WorkshopsEditComponent implements OnInit {
   myBlob: Blob;
   fileInfo: Observable<any>;
   
+
   constructor(
     private wss: WorkshopsService,
     private router: Router,
@@ -71,6 +73,7 @@ export class WorkshopsEditComponent implements OnInit {
     private presenterService: PresenterService,
     private storage: AngularFireStorage,
     private dialog: MatDialog,
+    private ng2ImgMax: Ng2ImgMaxService,
   ) { }
 
   ngOnInit() {
@@ -186,7 +189,26 @@ export class WorkshopsEditComponent implements OnInit {
       if (croppedImage) {
         var myBlob: Blob = this.dataURItoBlob(croppedImage);
         let myFile = new File([myBlob], "workshop-image.jpg", { type: 'image/jpeg' });
-        this.uploadFile(myFile);
+        // this.ng2ImgMax.resizeImage(myFile, 400, 300).subscribe(
+        //   result => {
+        //     // this.uploadedImage = result;
+        //     myFile = new File([result], "workshop-image.jpg", { type: 'image/jpeg' });
+        //   },
+        //   error => {
+        //     console.log('😢 Oh no!', error);
+        //   }
+        // );
+
+        this.ng2ImgMax.compressImage(myFile, 0.075).subscribe(
+          result => {
+            myFile = new File([result], "workshop-image.jpg", { type: 'image/jpeg' });
+            this.uploadFile(myFile);
+          },
+          error => {
+            console.log('😢 Oh no!', error);
+          }
+        );
+        
       }
       dialogRef = null;
     });

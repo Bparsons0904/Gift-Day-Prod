@@ -13,6 +13,7 @@ import { Inject } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { finalize } from 'rxjs/operators';
 import { ImageCropperModule } from 'ngx-image-cropper';
+import { Ng2ImgMaxService } from 'ng2-img-max';
 
 @Component({
   selector: 'app-presenters-edit',
@@ -49,7 +50,8 @@ export class PresentersEditComponent implements OnInit {
     private route: ActivatedRoute,
     private flashMessage: FlashMessagesService,
     private storage: AngularFireStorage,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private ng2ImgMax: Ng2ImgMaxService,
   ) { }
 
   ngOnInit() {
@@ -164,7 +166,15 @@ export class PresentersEditComponent implements OnInit {
       if (croppedImage) {
         var myBlob: Blob = this.dataURItoBlob(croppedImage);
         let myFile = new File([myBlob], "workshop-image.jpg", { type: 'image/jpeg' });
-        this.uploadFile(myFile);
+        this.ng2ImgMax.compressImage(myFile, 0.250).subscribe(
+          result => {
+            myFile = new File([result], "workshop-image.jpg", { type: 'image/jpeg' });
+            this.uploadFile(myFile);
+          },
+          error => {
+            console.log('😢 Oh no!', error);
+          }
+        );
       }
       dialogRef = null;
     });

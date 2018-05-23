@@ -19,6 +19,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Inject } from '@angular/core';
 import { ImageCropperModule } from 'ngx-image-cropper';
+import { Ng2ImgMaxService } from 'ng2-img-max';
 
 @Component({
   selector: 'app-workshops-add',
@@ -66,6 +67,7 @@ export class WorkshopsAddComponent implements OnInit {
   uploadPercent: Observable<number>;
   myBlob: Blob;
   fileInfo: Observable<any>;
+  
 
   @ViewChild('workshopForm') form: any;
 
@@ -76,6 +78,7 @@ export class WorkshopsAddComponent implements OnInit {
     private presenterService: PresenterService,
     private storage: AngularFireStorage,
     private dialog: MatDialog,
+    private ng2ImgMax: Ng2ImgMaxService,
   ) { }
 
   ngOnInit() {
@@ -173,7 +176,15 @@ export class WorkshopsAddComponent implements OnInit {
       if (croppedImage) {
         var myBlob: Blob = this.dataURItoBlob(croppedImage);
         let myFile = new File([myBlob], "workshop-image.jpg", { type: 'image/jpeg' });
-        this.uploadFile(myFile);
+        this.ng2ImgMax.compressImage(myFile, 0.250).subscribe(
+          result => {
+            myFile = new File([result], "workshop-image.jpg", { type: 'image/jpeg' });
+            this.uploadFile(myFile);
+          },
+          error => {
+            console.log('😢 Oh no!', error);
+          }
+        );
       }
       dialogRef = null;
     });

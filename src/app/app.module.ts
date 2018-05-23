@@ -53,6 +53,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ImageCropperModule } from 'ngx-image-cropper';
+import { Ng2ImgMaxModule } from 'ng2-img-max';
 
 @NgModule({
   declarations: [
@@ -101,6 +102,7 @@ import { ImageCropperModule } from 'ngx-image-cropper';
     BrowserAnimationsModule,
     HttpClientModule,
     ImageCropperModule,
+    Ng2ImgMaxModule,
   ],
   entryComponents: [
     DialogConfirmComponent, ConfirmComponent, WorkshopAddImageComponent, WorkshopEditImageComponent, PresentersEditImageComponent, PresentersAddImageComponent
