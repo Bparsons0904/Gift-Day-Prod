@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { WorkshopsService } from '../../services/workshops.service';
@@ -19,6 +19,12 @@ import { ImageCropperModule } from 'ngx-image-cropper';
 
 import { finalize } from 'rxjs/operators';
 import { Ng2ImgMaxService } from 'ng2-img-max';
+
+import {
+  ElementRef, EventEmitter, HostListener, Input, OnChanges, Output, SimpleChanges, ChangeDetectorRef, ChangeDetectionStrategy
+} from '@angular/core';
+import { DomSanitizer, SafeUrl, SafeStyle } from '@angular/platform-browser';
+import { ImageCropperComponent, CropperSettings, Bounds } from "ngx-img-cropper";
 
 @Component({
   selector: 'app-workshops-edit',
@@ -64,6 +70,13 @@ export class WorkshopsEditComponent implements OnInit {
   myBlob: Blob;
   fileInfo: Observable<any>;
   
+  name: string;
+  data1: any;
+  cropperSettings1: CropperSettings;
+  croppedWidth: number;
+  croppedHeight: number;
+
+  @ViewChild('cropper', undefined) cropper: ImageCropperComponent;
 
   constructor(
     private wss: WorkshopsService,
@@ -74,7 +87,48 @@ export class WorkshopsEditComponent implements OnInit {
     private storage: AngularFireStorage,
     private dialog: MatDialog,
     private ng2ImgMax: Ng2ImgMaxService,
-  ) { }
+  ) {
+    this.name = 'Angular2'
+    this.cropperSettings1 = new CropperSettings();
+    this.cropperSettings1.width = 200;
+    this.cropperSettings1.height = 200;
+
+    this.cropperSettings1.croppedWidth = 200;
+    this.cropperSettings1.croppedHeight = 200;
+
+    this.cropperSettings1.canvasWidth = 500;
+    this.cropperSettings1.canvasHeight = 300;
+
+    this.cropperSettings1.minWidth = 10;
+    this.cropperSettings1.minHeight = 10;
+
+    this.cropperSettings1.rounded = false;
+    this.cropperSettings1.keepAspect = false;
+
+    this.cropperSettings1.cropperDrawSettings.strokeColor = 'rgba(255,255,255,1)';
+    this.cropperSettings1.cropperDrawSettings.strokeWidth = 2;
+
+    this.data1 = {};
+   }
+
+  cropped(bounds: Bounds) {
+    this.croppedHeight = bounds.bottom - bounds.top;
+    this.croppedWidth = bounds.right - bounds.left;
+  }
+
+  fileChangeListener($event) {
+    var image: any = new Image();
+    var file: File = $event.target.files[0];
+    var myReader: FileReader = new FileReader();
+    var that = this;
+    myReader.onloadend = function (loadEvent: any) {
+      image.src = loadEvent.target.result;
+      that.cropper.setImage(image);
+
+    };
+
+    myReader.readAsDataURL(file);
+  }
 
   ngOnInit() {
     this.id = this.route.snapshot.params['id'];
@@ -199,10 +253,10 @@ export class WorkshopsEditComponent implements OnInit {
         //   }
         // );
 
-        this.ng2ImgMax.compressImage(myFile, 0.075).subscribe(
+        this.ng2ImgMax.compressImage(myFile, 0.100).subscribe(
           result => {
             myFile = new File([result], "workshop-image.jpg", { type: 'image/jpeg' });
-            this.uploadFile(myFile);
+            // this.uploadFile(myFile);
           },
           error => {
             console.log('😢 Oh no!', error);
@@ -213,6 +267,11 @@ export class WorkshopsEditComponent implements OnInit {
       dialogRef = null;
     });
   };
+
+  imageSelect() {
+    console.log("Image Select");
+    
+  }
 }
 
 @Component({
@@ -234,38 +293,139 @@ export class ConfirmComponent {
 
 @Component({
   selector: 'app-workshop-edit-image',
-  templateUrl: './workshop-edit-image.component.html',
+  template: ``,
   styles: []
 })
 export class WorkshopEditImageComponent {
 
-  aspect: string = " 4 / 3"
+  // aspect: string = "4 / 3"
+
+  data: any;
+  cropperSettings: CropperSettings;
+  @ViewChild('cropper', undefined)
+  cropper: ImageCropperComponent;
 
   constructor(
     public dialogRef: MatDialogRef<WorkshopEditImageComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any) { }
+    // private ng2ImgToolsService: Ng2ImgToolsService,
+    // private sanitizer: DomSanitizer,
+    private ng2ImgMax: Ng2ImgMaxService,
+    
+
+    @Inject(MAT_DIALOG_DATA) public data_dialog: any,
+  ) { 
+    this.cropperSettings = new CropperSettings();
+    this.cropperSettings.width = 100;
+    this.cropperSettings.height = 100;
+    this.cropperSettings.croppedWidth = 100;
+    this.cropperSettings.croppedHeight = 100;
+    this.cropperSettings.canvasWidth = 400;
+    this.cropperSettings.canvasHeight = 300;
+
+    this.data = {};
+    }
 
   onNoClick(): void {
     this.dialogRef.close();
   }
 
-  imageChangedEvent: any = '';
-  croppedImage: any = '';
-  imageRotation: number = 0;
-  imageFinishedLoading: boolean;
+  fileChangeListener($event) {
+    var image: any = new Image();
+    var file: File = $event.target.files[0];
+    var myReader: FileReader = new FileReader();
+    var that = this;
+    myReader.onloadend = function (loadEvent: any) {
+      image.src = loadEvent.target.result;
+      that.cropper.setImage(image);
 
-  fileChangeEvent(event: any): void {
-    this.imageChangedEvent = event;
+    };
+
+    myReader.readAsDataURL(file);
   }
-  imageCropped(image: string) {
-    this.croppedImage = image;
-  }
-  imageLoaded() {
-    // show cropper
-    this.imageFinishedLoading = true;
-  }
-  loadImageFailed() {
-    // show message
-  }
+  // imageChangedEvent: any = '';
+  // croppedImage: any = '';
+  // imageRotation: number = 0;
+  // imageFinishedLoading: boolean;
+  // imageEXIF: any;
+  // originalImage: any;
+  
+  // getEXIFOrientedImage(image: HTMLImageElement): Promise<HTMLImageElement> {
+  //   return this.ng2ImgToolsService.getEXIFOrientedImage(image);
+  // }
+
+  // convertBase64Image(imageBase64: string) {
+  //   this.originalImage = new Image();
+  //   // this.safeImgDataUrl = this.sanitizer.bypassSecurityTrustResourceUrl(imageBase64);
+  //   this.originalImage.src = imageBase64;
+  //   console.log(imageBase64);
+  //   console.log(this.originalImage);
+    
+  //   this.imageEXIF = this.getEXIFOrientedImage(this.originalImage);
+  //   console.log("Convert done");
+  // }
+
+  // fileChangeEvent(event: any): void {
+  //   // const fileReader = new FileReader();
+  //   // fileReader.onload = (ev: any) => {
+  //   //   if (event.target.files[0].type === 'image/jpeg' ||
+  //   //     event.target.files[0].type === 'image/jpg' ||
+  //   //     event.target.files[0].type === 'image/png' ||
+  //   //     event.target.files[0].type === 'image/gif') {
+  //   //       // this.convertBase64Image(ev.target.result);
+  //   //       // console.log(event.target.files[0].type);
+  //   //       console.log(ev);
+  //   //     this.imageEXIF = this.getEXIFOrientedImage(event.target.files[0]);
+        
+  //   //       // this.imageEXIF = this.getEXIFOrientedImage(ev.target.result);
+  //   //       console.log(this.imageEXIF);
+  //   //       this.imageChangedEvent = this.imageEXIF;
+  //   //   }
+  //   // };
+  //   // fileReader.readAsDataURL(event.target.files[0]);
+  //   // console.log(this.imageEXIF);
+  //   // let myFile = event.target.files[0];
+
+  //   // console.log(myFile);
+    
+  //   // this.ng2ImgMax.compressImage(myFile, 0.100).subscribe(
+  //   //   result => {
+  //   //     console.log(result);
+  //   //     myFile = new File([result], "workshop-image.jpg", { type: 'image/jpeg' });
+  //   //     // let image = this.getEXIFOrientedImage(result);
+  //   //     // console.log(image);
+  //   //     console.log(myFile);
+        
+  //   //     // myFile = new File([image], "workshop-image.jpg", { type: 'image/jpeg' });
+  //   //   },
+  //   //   error => {
+  //   //     console.log('😢 Oh no!', error);
+  //   //   }
+  //   // );
+  //   this.imageChangedEvent = event;
+  // }
+  // imageCropped(image: string) {
+  //   this.croppedImage = image;
+  // }
+  // imageLoaded() {
+  //   // show cropper
+  //   console.log(this.croppedImage);
+    
+  //   this.imageFinishedLoading = true;
+  //   let source = document.getElementsByClassName("source-image");
+  //   console.log(source);
+  //   let image = new Image(1000, 1000);
+  //   image.src = source["0"].src 
+  //   console.log(image);
+  //   console.log(this.getEXIFOrientedImage(image));
+    
+  //   this.imageEXIF = this.getEXIFOrientedImage(image);
+  //   console.log(this.imageEXIF.__zone_symbol__value.src);
+  //   console.log(this.croppedImage);
+    
+  //   this.croppedImage = this.imageEXIF = this.getEXIFOrientedImage(image);
+  // }
+  // loadImageFailed() {
+  //   // show message
+  // }
 
 }

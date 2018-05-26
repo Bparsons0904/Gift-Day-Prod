@@ -1,15 +1,21 @@
-<mat-dialog-content>
-    <input type="file" (change)="fileChangeEvent($event)" />
-    <image-cropper [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="true" [aspectRatio]="4 / 3" [imageQuality]="92" [resizeToWidth]="0"vformat="jpg" (imageCropped)="imageCropped($event)" (imageLoaded)="imageLoaded()" (loadImageFailed)="loadImageFailed()"></image-cropper>
-    <h3 class="text-center" *ngIf="imageFinishedLoading">Image Preview</h3>
-    <img class="img-preview img-fluid" [src]="croppedImage" />
+<!-- <mat-dialog-content>
+
+    <div>
+        <img-cropper [image]="data" [settings]="cropperSettings"></img-cropper>
+        <br>
+        <img [src]="data.image" [width]="cropperSettings.croppedWidth" [height]="cropperSettings.croppedHeight">
+    </div>
 </mat-dialog-content>
 <mat-dialog-actions>
-    <div *ngIf="imageFinishedLoading" class="mr-auto">
+    <div class="mr-auto">
         <button mat-raised-button (click)="onNoClick()" class="cancel-button text-center" tabindex="-1">Cancel</button>
     </div>
-    <div *ngIf="imageFinishedLoading" class="ml-auto">
-        <button (click)="dialogRef.close(croppedImage)" type="submit" value="upload" mat-raised-button class="submit-button text-center">Select Photo</button>
+    <div class="ml-auto">
+        <button (click)="dialogRef.close(data.image)" type="submit" value="upload" mat-raised-button class="submit-button text-center">Select Photo</button>
     </div>
-</mat-dialog-actions>
+</mat-dialog-actions> -->
 
+    <!-- <input type="file" (change)="fileChangeEvent($event)" />
+    <image-cropper [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="true" [aspectRatio]="4 / 3" [imageQuality]="92" [resizeToWidth]="0"vformat="jpg" (imageCropped)="imageCropped($event)" (imageLoaded)="imageLoaded()" (loadImageFailed)="loadImageFailed()"></image-cropper>
+    <h3 class="text-center" *ngIf="imageFinishedLoading">Image Preview</h3>
+    <img class="img-preview img-fluid" [src]="croppedImage" /> -->

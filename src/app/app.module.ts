@@ -80,7 +80,7 @@ import { Ng2ImgMaxModule } from 'ng2-img-max';
     WorkshopAddImageComponent,
     WorkshopEditImageComponent,
     PresentersEditImageComponent,
-    PresentersAddImageComponent
+    PresentersAddImageComponent,
   ],
   imports: [
     BrowserModule,
@@ -104,8 +104,8 @@ import { Ng2ImgMaxModule } from 'ng2-img-max';
     MatSelectModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    ImageCropperModule,
     Ng2ImgMaxModule,
+    ImageCropperModule,
   ],
   entryComponents: [
     DialogConfirmComponent, ConfirmComponent, WorkshopAddImageComponent, WorkshopEditImageComponent, PresentersEditImageComponent, PresentersAddImageComponent
