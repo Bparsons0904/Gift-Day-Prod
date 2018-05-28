@@ -8,8 +8,8 @@ import { User } from '../../models/user';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
-import { OnDestroy } from "@angular/core";
-import { Subscription } from 'rxjs/Subscription';
+
+import 'rxjs/add/operator/take';
 
 type UserFields = 'email' | 'password';
 type FormErrors = { [u in UserFields]: string };
@@ -19,9 +19,7 @@ type FormErrors = { [u in UserFields]: string };
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit, OnDestroy {
-
-  subscription: Subscription;
+export class LoginComponent implements OnInit {
 
   user: User;
   email: string;
@@ -53,13 +51,13 @@ export class LoginComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer
-  ) { 
+  ) {
     matIconRegistry.addSvgIconSet(domSanitizer.bypassSecurityTrustResourceUrl('./assets/icons/mdi.svg'));
   }
 
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
-  }
+  // ngOnDestroy() {
+  //   this.subscription.unsubscribe();
+  // }
 
   ngOnInit() {
     this.buildForm();
@@ -140,9 +138,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
   }
 
-  /// Shared
   private afterSignIn() {
-    this.subscription = this.userService.getUser(this.auth.getId()).subscribe(user => {
+    this.userService.getUser(this.auth.getId()).take(1).subscribe(user => {
       this.user = user;
       if (this.user.admin) {
         this.userService.admin = true;
@@ -152,8 +149,6 @@ export class LoginComponent implements OnInit, OnDestroy {
       } else {
         this.router.navigate(['/profile']);
       }
-
     });
   }
-
 }

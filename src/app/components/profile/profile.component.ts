@@ -32,7 +32,7 @@ export class ProfileComponent implements OnInit {
   registeredWorkshop: any[];
   test: Observable<User>;
   uid: string;
-  completeProfile: boolean = false;
+  completeProfile: boolean;
 
   workshop1: Workshop;
   workshop2: Workshop;
@@ -41,6 +41,9 @@ export class ProfileComponent implements OnInit {
   workshop: Workshop;
 
   grades = [
+    { value: '6th', viewValue: '6th' },
+    { value: '7th', viewValue: '7th' },
+    { value: '8th', viewValue: '8th' },
     { value: 'Freshman', viewValue: 'Freshman' },
     { value: 'Sophmore', viewValue: 'Sophomore' },
     { value: 'Junior', viewValue: 'Junior' },
@@ -58,33 +61,33 @@ export class ProfileComponent implements OnInit {
 
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer
-  ) { 
+  ) {
     matIconRegistry.addSvgIconSet(domSanitizer.bypassSecurityTrustResourceUrl('./assets/icons/mdi.svg'));
 
   }
 
   ngOnInit() {
     this.auth.user.subscribe(user => {
-      if (user != null) {
+      if (user !== null) {
         this.uid = user.uid;
         this.userService.getUser(this.uid).subscribe(user => {
           this.user = user;
           if (user.email && user.displayName && user.grade) {
             this.completeProfile = true;
           }
-          if (user.workshops.length != 3) {
+          if (user.workshops.length !== 3) {
             this.user.workshops = [null, null, null];
             this.userService.updateUsers(this.user);
           }
           for (let i = 0; i < 3; i++) {
             if (user.workshops[i] != null) {
               this.wss.getWorkshop(user.workshops[i]).subscribe(workshop => {
-                this["workshop" + String(i + 1)] = workshop;
+                this['workshop' + String(i + 1)] = workshop;
               });
             } else {
-              this["workshop" + String(i + 1)] = undefined;
+              this['workshop' + String(i + 1)] = undefined;
             }
-          };
+          }
         });
       }
 
@@ -113,9 +116,10 @@ export class ProfileComponent implements OnInit {
   }
 
   deleteRegistration(registeredSession, id) {
-    this['workshop' + registeredSession]['session' + registeredSession].registered.splice(this['workshop' + registeredSession]['session' + registeredSession].registered.indexOf(this.uid), 1)
+    this['workshop' + registeredSession]['session' + registeredSession].registered
+      .splice(this['workshop' + registeredSession]['session' + registeredSession].registered.indexOf(this.uid), 1);
     // this.workshop['session' + this.registeredSession].availableSeats += 1;
-    this.wss.updateWorkshop(this["workshop" + registeredSession]);
+    this.wss.updateWorkshop(this['workshop' + registeredSession]);
     this.user.workshops.splice(this.user.workshops.indexOf(id), 1, null);
     this.userService.removeUserRegistration(this.user);
     this['workshop' + registeredSession] = undefined;

@@ -20,7 +20,7 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Inject } from '@angular/core';
 import { ImageCropperModule } from 'ngx-image-cropper';
 import { Ng2ImgMaxService } from 'ng2-img-max';
-import { ImageCropperComponent, CropperSettings, Bounds } from "ngx-img-cropper";
+import { ImageCropperComponent, CropperSettings, Bounds } from 'ngx-img-cropper';
 
 @Component({
   selector: 'app-workshops-add',
@@ -55,7 +55,7 @@ export class WorkshopsAddComponent implements OnInit {
       // availableSeats: 0,
       registered: [],
     }
-  }
+  };
 
   presenters: Presenter[];
 
@@ -76,7 +76,7 @@ export class WorkshopsAddComponent implements OnInit {
   croppedHeight: number;
 
   swapImage: boolean;
-  uploadCompleted: boolean = true;
+  uploadCompleted = true;
   processing: boolean;
   compressedFile: any;
 
@@ -90,8 +90,8 @@ export class WorkshopsAddComponent implements OnInit {
     private storage: AngularFireStorage,
     private dialog: MatDialog,
     private ng2ImgMax: Ng2ImgMaxService,
-  ) { 
-    this.name = 'Angular2'
+  ) {
+    this.name = 'Angular2';
     this.cropperSettings1 = new CropperSettings();
     this.cropperSettings1.width = 200;
     this.cropperSettings1.height = 150;
@@ -113,7 +113,7 @@ export class WorkshopsAddComponent implements OnInit {
 
     this.cropperSettings1.cropperDrawSettings.strokeColor = 'rgba(255,255,255,1)';
     this.cropperSettings1.cropperDrawSettings.strokeWidth = 2;
-    this.cropperSettings1.cropperClass = "cropper-tool";
+    this.cropperSettings1.cropperClass = 'cropper-tool';
 
     this.data1 = {};
   }
@@ -122,7 +122,7 @@ export class WorkshopsAddComponent implements OnInit {
     this.presenterService.getPresenters().subscribe(presenters => {
       this.presenters = presenters;
     });
-    var width = document.getElementsByClassName('card-body')["0"].offsetWidth;
+    const width = document.getElementsByClassName('card-body')['0'].offsetWidth;
     this.cropperSettings1.canvasWidth = width - 40;
     this.cropperSettings1.canvasHeight = width;
   }
@@ -137,8 +137,8 @@ export class WorkshopsAddComponent implements OnInit {
   }
 
   finishedImageToFile(image) {
-    var myBlob: Blob = this.dataURItoBlob(image.src);
-    let myFile = new File([myBlob], "workshop-image.jpg", { type: 'image/jpeg' });
+    const myBlob: Blob = this.dataURItoBlob(image.src);
+    const myFile = new File([myBlob], 'workshop-image.jpg', { type: 'image/jpeg' });
     return myFile;
   }
 
@@ -146,10 +146,10 @@ export class WorkshopsAddComponent implements OnInit {
     return new Promise((resolve, reject) => {
       this.ng2ImgMax.compressImage(myFile, compression).subscribe(
         result => {
-          this.compressedFile = new File([result], "workshop-image.jpg", { type: 'image/jpeg' }),
+          this.compressedFile = new File([result], 'workshop-image.jpg', { type: 'image/jpeg' }),
             error => {
               if (error) {
-                console.log("error")
+                console.log('error');
               }
             }
             ,
@@ -160,19 +160,19 @@ export class WorkshopsAddComponent implements OnInit {
           console.log('😢 Oh no!', error);
         }
       );
-    })
+    });
   }
 
   imageSelect() {
     this.processing = true;
-    var image = document.getElementById('cropped-result');
-    var myFile: File = this.finishedImageToFile(image);
+    const image = document.getElementById('cropped-result');
+    const myFile: File = this.finishedImageToFile(image);
     if (myFile.size > 5000000) {
-      this.compressImage(myFile, 0.250)
+      this.compressImage(myFile, 0.250);
     } else if (myFile.size > 3000000) {
-      this.compressImage(myFile, 0.125)
+      this.compressImage(myFile, 0.125);
     } else {
-      this.compressImage(myFile, 0.075)
+      this.compressImage(myFile, 0.075);
     }
   }
 
@@ -180,7 +180,7 @@ export class WorkshopsAddComponent implements OnInit {
     this.uploadCompleted = true;
     this.processing = false;
   }
-  
+
   onSubmit({ value, valid }: { value: Workshop, valid: boolean }) {
     if (!valid) {
       this.flashMessage.show('Please fill out the form correctly', {
@@ -190,15 +190,15 @@ export class WorkshopsAddComponent implements OnInit {
       if (this.workshop.session1.totalSeats > 0) {
         this.workshop.session1.available = true;
         // this.workshop.session1.availableSeats = this.workshop.session1.totalSeats;
-      };
+      }
       if (this.workshop.session2.totalSeats > 0) {
         this.workshop.session2.available = true;
         // this.workshop.session2.availableSeats = this.workshop.session2.totalSeats;
-      };
+      }
       if (this.workshop.session3.totalSeats > 0) {
         this.workshop.session3.available = true;
         // this.workshop.session3.availableSeats = this.workshop.session3.totalSeats;
-      };
+      }
       this.wss.newWorkshop(this.workshop);
       this.flashMessage.show('New workshop added', {
         cssClass: 'alert-success', timeout: 4000
@@ -215,12 +215,12 @@ export class WorkshopsAddComponent implements OnInit {
     const task = this.storage.upload(filePath, file);
 
     if (file.type.split('/')[0] !== 'image') {
-      console.error('unsupported file type :( ')
+      console.error('unsupported file type :( ');
       return;
     }
 
     this.uploadPercent = task.percentageChanges();
-    
+
     task.snapshotChanges().pipe(
       finalize(() => {
         this.downloadURL = fileRef.getDownloadURL();
@@ -233,9 +233,9 @@ export class WorkshopsAddComponent implements OnInit {
   }
 
   dataURItoBlob(dataURI) {
-    var binary = atob(dataURI.split(',')[1]);
-    var array = [];
-    for (var i = 0; i < binary.length; i++) {
+    const binary = atob(dataURI.split(',')[1]);
+    const array = [];
+    for (let i = 0; i < binary.length; i++) {
       array.push(binary.charCodeAt(i));
     }
     return new Blob([new Uint8Array(array)], {

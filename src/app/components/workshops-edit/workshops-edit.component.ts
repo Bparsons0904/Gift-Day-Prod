@@ -24,7 +24,7 @@ import {
   ElementRef, EventEmitter, HostListener, Input, OnChanges, Output, SimpleChanges, ChangeDetectorRef, ChangeDetectionStrategy
 } from '@angular/core';
 import { DomSanitizer, SafeUrl, SafeStyle } from '@angular/platform-browser';
-import { ImageCropperComponent, CropperSettings, Bounds } from "ngx-img-cropper";
+import { ImageCropperComponent, CropperSettings, Bounds } from 'ngx-img-cropper';
 
 
 @Component({
@@ -58,7 +58,7 @@ export class WorkshopsEditComponent implements OnInit {
       totalSeats: 0,
       registered: [],
     }
-  }
+  };
 
   presenters: Presenter[];
   task: AngularFireUploadTask;
@@ -70,7 +70,7 @@ export class WorkshopsEditComponent implements OnInit {
   uploadPercent: Observable<number>;
   myBlob: Blob;
   fileInfo: Observable<any>;
-  
+
   croppedImage: any;
   name: string;
   data1: any;
@@ -79,7 +79,7 @@ export class WorkshopsEditComponent implements OnInit {
   croppedHeight: number;
 
   swapImage: boolean;
-  uploadCompleted: boolean = true;
+  uploadCompleted = true;
   processing: boolean;
   compressedFile: any;
 
@@ -95,7 +95,7 @@ export class WorkshopsEditComponent implements OnInit {
     private dialog: MatDialog,
     private ng2ImgMax: Ng2ImgMaxService,
   ) {
-    this.name = 'Angular2'
+    this.name = 'Angular2';
     this.cropperSettings1 = new CropperSettings();
     this.cropperSettings1.width = 400;
     this.cropperSettings1.height = 300;
@@ -117,7 +117,7 @@ export class WorkshopsEditComponent implements OnInit {
 
     this.cropperSettings1.cropperDrawSettings.strokeColor = 'rgba(255,255,255,1)';
     this.cropperSettings1.cropperDrawSettings.strokeWidth = 2;
-    this.cropperSettings1.cropperClass = "cropper-tool";
+    this.cropperSettings1.cropperClass = 'cropper-tool';
 
     this.data1 = {};
    }
@@ -132,8 +132,8 @@ export class WorkshopsEditComponent implements OnInit {
   }
 
   finishedImageToFile(image) {
-    var myBlob: Blob = this.dataURItoBlob(image.src);
-    let myFile = new File([myBlob], "workshop-image.jpg", { type: 'image/jpeg' });
+    const myBlob: Blob = this.dataURItoBlob(image.src);
+    const myFile = new File([myBlob], 'workshop-image.jpg', { type: 'image/jpeg' });
     return myFile;
   }
 
@@ -141,10 +141,10 @@ export class WorkshopsEditComponent implements OnInit {
     return new Promise((resolve, reject) => {
       this.ng2ImgMax.compressImage(myFile, compression).subscribe(
         result => {
-          this.compressedFile = new File([result], "workshop-image.jpg", { type: 'image/jpeg' }),
+          this.compressedFile = new File([result], 'workshop-image.jpg', { type: 'image/jpeg' }),
           error => {
-            if(error) {
-            console.log("error")
+            if (error) {
+            console.log('error');
           }}
             ,
             this.imageSwap();
@@ -154,19 +154,19 @@ export class WorkshopsEditComponent implements OnInit {
           console.log('😢 Oh no!', error);
         }
       );
-    })
+    });
   }
 
   imageSelect() {
     this.processing = true;
-    var image = document.getElementById('cropped-result');
-    var myFile: File = this.finishedImageToFile(image);
-    if(myFile.size > 5000000) {
-      this.compressImage(myFile, 0.250)
-    } else if (myFile.size > 3000000){
-      this.compressImage(myFile, 0.125)
+    const image = document.getElementById('cropped-result');
+    const myFile: File = this.finishedImageToFile(image);
+    if (myFile.size > 5000000) {
+      this.compressImage(myFile, 0.250);
+    } else if (myFile.size > 3000000) {
+      this.compressImage(myFile, 0.125);
     } else {
-      this.compressImage(myFile, 0.075)
+      this.compressImage(myFile, 0.075);
     }
   }
 
@@ -177,7 +177,7 @@ export class WorkshopsEditComponent implements OnInit {
     this.presenterService.getPresenters().subscribe(presenters => {
       this.presenters = presenters;
     });
-    var width = document.getElementsByClassName('card-body')["0"].offsetWidth;
+    const width = document.getElementsByClassName('card-body')['0'].offsetWidth;
     this.cropperSettings1.canvasWidth = width - 40;
     this.cropperSettings1.canvasHeight = width;
   }
@@ -190,18 +190,21 @@ export class WorkshopsEditComponent implements OnInit {
     } else {
       value.id = this.id;
       for (let i = 1; i < 4; i++) {
-        if (this.workshop["session" + i].totalSeats > 0) {
-          this.workshop["session" + i].available = true;
+        if (this.workshop['session' + i].totalSeats > 0) {
+          this.workshop['session' + i].available = true;
         } else {
-          this.workshop["session" + i].available = false;
+          this.workshop['session' + i].available = false;
         }
       }
       // this.workshop.imageURL = String(this.downloadURL);
+      if (this.workshop.presenter1 === this.workshop.presenter2) {
+        this.workshop.presenter2 = "'";
+      }
       this.wss.updateWorkshop(this.workshop);
       this.flashMessage.show('Workshop Updated.', {
         cssClass: 'alert-success', timeout: 4000
       });
-      this.router.navigate(['/workshops/'])
+      this.router.navigate(['/workshops/']);
       // this.router.navigate(['/workshops/' + this.id])
     }
   }
@@ -218,7 +221,7 @@ export class WorkshopsEditComponent implements OnInit {
       }
       dialogRef = null;
     });
-  };
+  }
 
   onDeleteClick() {
     this.wss.deleteWorkshop(this.workshop);
@@ -241,7 +244,7 @@ export class WorkshopsEditComponent implements OnInit {
     const task = this.storage.upload(filePath, file);
 
     if (file.type.split('/')[0] !== 'image') {
-      console.error('unsupported file type :( ')
+      console.error('unsupported file type :( ');
       return;
     }
 
@@ -261,9 +264,9 @@ export class WorkshopsEditComponent implements OnInit {
   }
 
   dataURItoBlob(dataURI) {
-    var binary = atob(dataURI.split(',')[1]);
-    var array = [];
-    for (var i = 0; i < binary.length; i++) {
+    const binary = atob(dataURI.split(',')[1]);
+    const array = [];
+    for (let i = 0; i < binary.length; i++) {
       array.push(binary.charCodeAt(i));
     }
     return new Blob([new Uint8Array(array)], {

@@ -68,8 +68,8 @@ export class MqIfDirective implements OnDestroy {
          */
         if (this.i > 0) {
             this.ref.detectChanges();
-        }
-        else
+        } else {
             this.i++;
+        }
     }
 }

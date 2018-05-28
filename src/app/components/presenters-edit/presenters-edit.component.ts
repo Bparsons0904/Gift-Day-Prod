@@ -14,7 +14,7 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { finalize } from 'rxjs/operators';
 import { ImageCropperModule } from 'ngx-image-cropper';
 import { Ng2ImgMaxService } from 'ng2-img-max';
-import { ImageCropperComponent, CropperSettings, Bounds } from "ngx-img-cropper";
+import { ImageCropperComponent, CropperSettings, Bounds } from 'ngx-img-cropper';
 
 @Component({
   selector: 'app-presenters-edit',
@@ -32,7 +32,7 @@ export class PresentersEditComponent implements OnInit {
     email: '',
     currentEmployer: '',
     imageURL: ''
-  }
+  };
 
   task: AngularFireUploadTask;
   percentage: Observable<number>;
@@ -51,7 +51,7 @@ export class PresentersEditComponent implements OnInit {
   croppedHeight: number;
 
   swapImage: boolean;
-  uploadCompleted: boolean = true;
+  uploadCompleted = true;
   processing: boolean;
   compressedFile: any;
 
@@ -65,8 +65,8 @@ export class PresentersEditComponent implements OnInit {
     private storage: AngularFireStorage,
     private dialog: MatDialog,
     private ng2ImgMax: Ng2ImgMaxService,
-  ) { 
-    this.name = 'Angular2'
+  ) {
+    this.name = 'Angular2';
     this.cropperSettings1 = new CropperSettings();
     this.cropperSettings1.width = 200;
     this.cropperSettings1.height = 150;
@@ -88,7 +88,7 @@ export class PresentersEditComponent implements OnInit {
 
     this.cropperSettings1.cropperDrawSettings.strokeColor = 'rgba(255,255,255,1)';
     this.cropperSettings1.cropperDrawSettings.strokeWidth = 2;
-    this.cropperSettings1.cropperClass = "cropper-tool";
+    this.cropperSettings1.cropperClass = 'cropper-tool';
 
     this.data1 = {};
   }
@@ -96,7 +96,7 @@ export class PresentersEditComponent implements OnInit {
   ngOnInit() {
     this.id = this.route.snapshot.params['id'];
     this.presenterService.getPresenter(this.id).subscribe(presenter => this.presenter = presenter);
-    var width = document.getElementsByClassName('card-body')["0"].offsetWidth;
+    const width = document.getElementsByClassName('card-body')['0'].offsetWidth;
     this.cropperSettings1.canvasWidth = width - 40;
     this.cropperSettings1.canvasHeight = width;
   }
@@ -111,8 +111,8 @@ export class PresentersEditComponent implements OnInit {
   }
 
   finishedImageToFile(image) {
-    var myBlob: Blob = this.dataURItoBlob(image.src);
-    let myFile = new File([myBlob], "workshop-image.jpg", { type: 'image/jpeg' });
+    const myBlob: Blob = this.dataURItoBlob(image.src);
+    const myFile = new File([myBlob], 'workshop-image.jpg', { type: 'image/jpeg' });
     return myFile;
   }
 
@@ -120,10 +120,10 @@ export class PresentersEditComponent implements OnInit {
     return new Promise((resolve, reject) => {
       this.ng2ImgMax.compressImage(myFile, compression).subscribe(
         result => {
-          this.compressedFile = new File([result], "workshop-image.jpg", { type: 'image/jpeg' }),
+          this.compressedFile = new File([result], 'workshop-image.jpg', { type: 'image/jpeg' }),
             error => {
               if (error) {
-                console.log("error")
+                console.log('error');
               }
             }
             ,
@@ -134,19 +134,19 @@ export class PresentersEditComponent implements OnInit {
           console.log('😢 Oh no!', error);
         }
       );
-    })
+    });
   }
 
   imageSelect() {
     this.processing = true;
-    var image = document.getElementById('cropped-result');
-    var myFile: File = this.finishedImageToFile(image);
+    const image = document.getElementById('cropped-result');
+    const myFile: File = this.finishedImageToFile(image);
     if (myFile.size > 5000000) {
-      this.compressImage(myFile, 0.250)
+      this.compressImage(myFile, 0.250);
     } else if (myFile.size > 3000000) {
-      this.compressImage(myFile, 0.125)
+      this.compressImage(myFile, 0.125);
     } else {
-      this.compressImage(myFile, 0.075)
+      this.compressImage(myFile, 0.075);
     }
   }
 
@@ -161,7 +161,7 @@ export class PresentersEditComponent implements OnInit {
       this.flashMessage.show('Presenter Updated.', {
         cssClass: 'alert-success', timeout: 4000
       });
-      this.router.navigate(['/presenters/'])
+      this.router.navigate(['/presenters/']);
       // this.router.navigate(['/presenters/' + this.id])
     }
   }
@@ -178,7 +178,7 @@ export class PresentersEditComponent implements OnInit {
       }
       dialogRef = null;
     });
-  };
+  }
 
   onDeleteClick() {
     this.presenterService.deletePresenter(this.presenter);
@@ -201,7 +201,7 @@ export class PresentersEditComponent implements OnInit {
     const task = this.storage.upload(filePath, file);
 
     if (file.type.split('/')[0] !== 'image') {
-      console.error('unsupported file type :( ')
+      console.error('unsupported file type :( ');
       return;
     }
 
@@ -219,9 +219,9 @@ export class PresentersEditComponent implements OnInit {
   }
 
   dataURItoBlob(dataURI) {
-    var binary = atob(dataURI.split(',')[1]);
-    var array = [];
-    for (var i = 0; i < binary.length; i++) {
+    const binary = atob(dataURI.split(',')[1]);
+    const array = [];
+    for (let i = 0; i < binary.length; i++) {
       array.push(binary.charCodeAt(i));
     }
     return new Blob([new Uint8Array(array)], {

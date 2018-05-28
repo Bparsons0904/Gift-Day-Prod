@@ -68,10 +68,10 @@ export class WorkshopDetailsComponent implements OnInit {
             this.user = user;
             for (let i = 0; i < this.user.workshops.length; i++) {
               const element = this.user.workshops[i];
-              if (element != null) {
-                this["registered" + (i + 1)] = true;
+              if (element !== null) {
+                this['registered' + (i + 1)] = true;
               }
-              if (element == this.id) {
+              if (element === this.id) {
                 this.currentRegistration = i + 1;
               }
             }
@@ -82,7 +82,7 @@ export class WorkshopDetailsComponent implements OnInit {
             this.registeredSession = '1';
           } else {
             this.registered1 = false;
-          };
+          }
 
           if (this.workshop.session2.registered.indexOf(this.uid) > -1) {
             this.registered2 = true;
@@ -90,22 +90,24 @@ export class WorkshopDetailsComponent implements OnInit {
             this.registeredSession = '2';
           } else {
             this.registered2 = false;
-          };
+          }
           if (this.workshop.session3.registered.indexOf(this.uid) > -1) {
             this.registered3 = true;
             this.registered = true;
             this.registeredSession = '3';
           } else {
             this.registered3 = false;
-          };
+          }
         } else {
           this.uid = null;
         }
       });
 
-      this.presenterService.getPresenter(this.workshop.presenter1).subscribe(presenter => this.presenter1 = presenter);
+      this.presenterService.getPresenter(this.workshop.presenter1)
+        .subscribe(presenter => this.presenter1 = presenter);
       if (this.workshop.presenter2) {
-        this.presenterService.getPresenter(this.workshop.presenter2).subscribe(presenter => this.presenter2 = presenter);
+        this.presenterService.getPresenter(this.workshop.presenter2)
+          .subscribe(presenter => this.presenter2 = presenter);
       }
     });
   }
@@ -116,13 +118,14 @@ export class WorkshopDetailsComponent implements OnInit {
     this['registered' + sessionNumber] = true;
     this.registeredSession = sessionNumber;
     this.registered = true;
-    this["registered" + (sessionNumber + 1)] = true;
+    this['registered' + (sessionNumber + 1)] = true;
     this.user.workshops.splice((Number(sessionNumber) - 1), 1, this.id);
     this.userService.addUserRegistration(this.user);
   }
 
   deleteRegistration() {
-    this.workshop['session' + this.registeredSession].registered.splice(this.workshop['session' + this.registeredSession].registered.indexOf(this.uid), 1)
+    this.workshop['session' + this.registeredSession].registered
+      .splice(this.workshop['session' + this.registeredSession].registered.indexOf(this.uid), 1);
     this.registered = false;
     this.registeredSession = null;
     this.registered1 = false;

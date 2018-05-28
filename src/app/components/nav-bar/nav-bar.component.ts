@@ -13,10 +13,11 @@ export class NavBarComponent implements OnInit {
 
   isLoggedIn: boolean;
   loggedInUser: string;
-  
+
   constructor(public authService: AuthService,
     private router: Router,
-    private flashMessage: FlashMessagesService,) { }
+    private flashMessage: FlashMessagesService,
+  ) { }
 
   ngOnInit() {
     this.authService.getAuth().subscribe(auth => {
@@ -35,6 +36,5 @@ export class NavBarComponent implements OnInit {
       cssClass: 'alert-success', timeout: 4000
     });
     this.router.navigate(['/login']);
-  } 
-
+  }
 }

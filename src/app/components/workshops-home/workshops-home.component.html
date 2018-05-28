@@ -17,7 +17,7 @@
   <div class="">
     <div class="card-deck justify-content-center">
       <div class="card mb-4" *ngFor="let workshop of workshops">
-        <img class="img-fluid" src="{{ workshop.imageURL }}" alt="{{ workshop.name + 'image' }}" routerLink="/workshops/{{ workshop.id }}">
+        <img *ngIf="workshop.imageURL" class="img-fluid" src="{{ workshop.imageURL }}" alt="{{ workshop.name + 'image' }}" routerLink="/workshops/{{ workshop.id }}">
         <div class="card-body" routerLink="/workshops/{{ workshop.id }}">
           <div class="">
             <h3 class="card-text">

@@ -112,7 +112,8 @@ import { ImageCropperModule } from 'ngx-img-cropper';
   entryComponents: [
     DialogConfirmComponent, ConfirmComponent
   ],
-  providers: [{ provide: FirebaseOptionsToken, useValue: environment.firebase }, AuthService, UserService, WorkshopsService, PresenterService, NotifyService],
+  providers: [{ provide: FirebaseOptionsToken, useValue: environment.firebase },
+    AuthService, UserService, WorkshopsService, PresenterService, NotifyService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

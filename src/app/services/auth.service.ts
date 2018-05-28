@@ -2,19 +2,19 @@ import { of as observableOf, Observable } from 'rxjs';
 
 import { map, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import { AngularFireAuth } from "angularfire2/auth";
+import { AngularFireAuth } from 'angularfire2/auth';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
 
-//User Profile Addin
+  //User Profile Addin
 import { Router } from '@angular/router';
 import {
   AngularFirestore, AngularFirestoreCollection,
   AngularFirestoreDocument
 } from 'angularfire2/firestore';
-// import { firebase } from '@firebase/app';
+  // import { firebase } from '@firebase/app';
 import * as firebaseaf from 'firebase/app';
-import { firebase } from '@firebase/app'
-import '@firebase/auth'
+import { firebase } from '@firebase/app';
+import '@firebase/auth';
 
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { NotifyService } from './notify.service';
@@ -41,14 +41,14 @@ export class AuthService {
     this.user = this.afAuth.authState.pipe(
       switchMap(user => {
         if (user) {
-          return this.afs.doc<User>(`users/${user.uid}`).valueChanges()
+          return this.afs.doc<User>(`users/${user.uid}`).valueChanges();
         } else {
-          return observableOf(null)
+          return observableOf(null);
         }
       }));
 
     this.afAuth.authState.subscribe((auth) => {
-      this.authState = auth
+      this.authState = auth;
     });
    }
 
@@ -61,7 +61,7 @@ export class AuthService {
   }
 
   getAuthID() {
-    return this.authState.uid
+    return this.authState.uid;
     // return this.afAuth.auth;
   }
 
@@ -71,17 +71,17 @@ export class AuthService {
 
   // User Profile Addins
   googleLogin() {
-    const provider = new firebase.auth.GoogleAuthProvider()
+    const provider = new firebase.auth.GoogleAuthProvider();
     return this.oAuthLogin(provider);
   }
 
   facebookLogin() {
-    const provider = new firebase.auth.FacebookAuthProvider()
+    const provider = new firebase.auth.FacebookAuthProvider();
     return this.oAuthLogin(provider);
   }
 
   phoneLogin() {
-    const provider = new firebase.auth.PhoneAuthProvider()
+    const provider = new firebase.auth.PhoneAuthProvider();
     return this.oAuthLogin(provider);
   }
 
@@ -99,7 +99,6 @@ export class AuthService {
     return this.afAuth.auth.createUserWithEmailAndPassword(email, password)
       .then((user) => {
         const subUser = user.user;
-        
         // this.notify.update('Welcome to Firestarter!!!', 'success');
         return this.updateUserData(subUser); // if using firestore
       })
@@ -151,11 +150,11 @@ export class AuthService {
   }
 
   setId(uid: string) {
-    this.uid = uid
+    this.uid = uid;
   }
 
   getId() {
-    return this.uid
+    return this.uid;
   }
   // Sets user data to firestore after succesful login
   private updateUserData(user: User) {

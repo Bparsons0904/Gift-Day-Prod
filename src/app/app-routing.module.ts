@@ -31,7 +31,7 @@ const routes: Routes = [
     { path: 'presenters/edit/:id', component: PresentersEditComponent, canActivate: [AdminGuard] },
     { path: 'presenters/:id', component: PresentersDetailsComponent },
     { path: '**', component: NotFoundComponent },
-]
+];
 @NgModule({
     exports: [RouterModule],
     imports: [

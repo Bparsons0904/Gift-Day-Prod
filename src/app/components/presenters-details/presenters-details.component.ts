@@ -7,7 +7,6 @@ import { Workshop } from '../../models/Workshops';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDividerModule } from '@angular/material/divider';
 
-
 @Component({
   selector: 'app-presenters-details',
   templateUrl: './presenters-details.component.html',
@@ -24,7 +23,7 @@ export class PresentersDetailsComponent implements OnInit {
     email: '',
     currentEmployer: '',
     imageURL: ''
-  }
+  };
 
   workshops: Workshop[];
   workshop: Workshop;
