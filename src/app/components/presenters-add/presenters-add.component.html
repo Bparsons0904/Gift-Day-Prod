@@ -71,135 +71,43 @@
             Employer must be at least 3 characters
           </div> -->
         </mat-form-field>
-        <mat-form-field>
-          <!-- <div class="form-group">
-            
-          </div> -->
-          <!-- <input matInput placeholder="Presenter Image" type="string" class="form-control" [(ngModel)]="presenter.imageURL" name="imageURL"
-            #presenterImageURL="ngModel"> -->
-          <input matInput placeholder="Presenter Image" type="string" class="form-control" [(ngModel)]="presenter.imageURL" name="imageURL"
-            #presenterImageURL="ngModel">
-        </mat-form-field>
-
-        <div class="file">
-          <!-- <label class="file-label">
-                      <input class="file-input" type="file" (change)="openDialog()">
-                    </label> -->
-          <button type="button" value="open" (click)="openDialog()" mat-raised-button class="select-button ml-auto text-center">Select Photo</button>
-        </div>
-        
-        <div *ngIf="uploadPercent | async as pct">
-        
-          <progress class="progress is-info" [value]="pct" max="100">
-          </progress>
-          <p *ngIf="pct == 100">Upload Complete</p>
-        </div>
-
-        <!-- <div *ngIf="snapshot | async as snap">
-          <p *ngIf="!isActive(snap) && downloadURL">Upload Complete</p>
-        </div> -->
-        <div class="ml-auto submit">
-          <button type="submit" value="Submit" mat-raised-button class="submit-button ml-auto text-center">Submit</button>
-        </div>
-      </div>
-
-
-      <!-- <div class="form-group">
-        <label for="name">Presenter Name</label>
-        <input type="text" class="form-control" name="name" #presenterName="ngModel" [ngClass]="{'is-invalid':presenterName.errors && presenterName.touched}" [(ngModel)]="presenter.name" minlength="2" required>
-        <div [hidden]="!presenterName.errors?.required" class="invalid-feedback">
-          Presenter Name Required
-        </div>
-        <div [hidden]="!presenterName.errors?.minlength" class="invalid-feedback">
-          Must be at least 2 characters
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label for="occupation">Current Position</label>
-        <input type="text" class="form-control" name="occupation" #presenterOccupation="ngModel" [ngClass]="{'is-invalid':presenterOccupation.errors && presenterOccupation.touched}" [(ngModel)]="presenter.occupation" minlength="2" required>
-        <div [hidden]="!presenterOccupation.errors?.required" class="invalid-feedback">
-          Occupation Required
-        </div>
-        <div [hidden]="!presenterOccupation.errors?.minlength" class="invalid-feedback">
-          Must be at least 2 characters
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label for="bio">Presenter Bio</label>
-        <input type="text" class="form-control" [ngClass]="{'is-invalid':presenterBio.errors && presenterBio.touched}" [(ngModel)]="presenter.bio"
-          name="bio" #presenterBio="ngModel" minlength="10" required>
-        <div [hidden]="!presenterBio.errors?.required" class="invalid-feedback">
-          Bio is required
-        </div>
-        <div [hidden]="!presenterBio.errors?.minlength" class="invalid-feedback">
-          Bio must be at least 10 characters
-        </div>
+      <div *ngIf="presenter.imageURL && !swapImage" class="current-image">
+        <img class="img-responsive" src="{{ presenter.imageURL }}" alt="{{ presenter.name }} iamge">
       </div>
       
-      <div class="form-group">
-        <label for="email">Email</label>
-        <input type="text" class="form-control" name="email" #presenterEmail="ngModel" [ngClass]="{'is-invalid':presenterEmail.errors && presenterEmail.touched}"
-          [(ngModel)]="presenter.email" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$">
-        <div [hidden]="!presenterEmail.errors?.required" class="invalid-feedback">
-          Email Required
-        </div>
-        <div [hidden]="!presenterEmail.errors?.pattern" class="invalid-feedback">
-          Email is not valid.
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label for="education">Education</label>
-        <input type="text" class="form-control" [ngClass]="{'is-invalid':presenterEducation.errors && presenterEducation.touched}" [(ngModel)]="presenter.education"
-          name="education" #presenterEducation="ngModel" minlength="3">
-        <div [hidden]="!presenterEducation.errors?.required" class="invalid-feedback">
-          Education is required
-        </div>
-        <div [hidden]="!presenterEducation.errors?.minlength" class="invalid-feedback">
-          Education must be at least 3 characters
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label for="currentEmployer">Current Employer</label>
-        <input type="text" class="form-control" [ngClass]="{'is-invalid':presenterCurrentEmployer.errors && presenterCurrentEmployer.touched}" [(ngModel)]="presenter.currentEmployer"
-          name="currentEmployer" #presenterCurrentEmployer="ngModel" minlength="3">
-        <div [hidden]="!presenterCurrentEmployer.errors?.required" class="invalid-feedback">
-          CurrentEmployer is required
-        </div>
-        <div [hidden]="!presenterCurrentEmployer.errors?.minlength" class="invalid-feedback">
-          Employer must be at least 3 characters
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label for="imageURL">Presenter Image</label>
-        <input type="string" class="form-control" [(ngModel)]="presenter.imageURL" name="imageURL" #presenterImageURL="ngModel">
-      </div>
-
-      <div class="dropzone" dropZone (hovered)="toggleHover($event)" (dropped)="startUpload($event)" [class.hovering]="isHovering">
-        <div class="file">
-          <label class="file-label">
-            <input class="file-input" type="file" (change)="startUpload($event.target.files)">
-          </label>
-        </div>
+      <div *ngIf="!swapImage" class="ml-auto">
+        <button (click)="imageSwap()" type="button" value="open" mat-raised-button class="submit-button text-center image-upload">Edit Image</button>
       </div>
       
-      <div *ngIf="percentage | async as pct">
-      
-        <progress class="progress is-info" [value]="pct" max="100">
-        </progress>
-        <p>{{ pct | number }}%</p>
+      <div *ngIf="swapImage">
+        <img-cropper [image]="data1" [settings]="cropperSettings1" (onCrop)="cropped($event)"></img-cropper>
+        <span class="result" *ngIf="swapImage && data1.image" (change)="fileChangeEvent($event)">
+          <img id="cropped-result" [src]="data1.image" [width]="croppedWidth" [height]="croppedHeight" (change)="imageSelect()">
+        </span>
       </div>
       
-      <div *ngIf="snapshot | async as snap">
-        <p *ngIf="!isActive(snap) && downloadURL">Upload Complete</p>
+      <div *ngIf="processing" class="load-bar">
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
       </div>
-
-      <input type="submit" value="Submit" class="btn btn-primary btn-block"> -->
-
+      
+      <div class="submit">
+        <div *ngIf="swapImage" class="mr-auto">
+          <button (click)="imageSwap()" type="button" value="open" mat-raised-button class="cancel-button text-center image-upload">Cancel</button>
+        </div>
+        <div *ngIf="data1.image && swapImage" class="ml-auto">
+          <button (click)="imageSelect()" type="button" value="open" mat-raised-button class="submit-button text-center image-upload">Select Image</button>
+        </div>
+      </div>
+      </div>
+      <!-- End Material Form -->
+      
+      <div class="submit">
+        <div class="ml-auto">
+          <button [disabled]="swapImage || !uploadCompleted" type="submit" value="Submit" mat-raised-button class="submit-button text-center">Submit</button>
+        </div>
+      </div>
     </form>
   </div>
 </div>

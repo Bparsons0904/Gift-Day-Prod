@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { PresenterService } from '../../services/presenter.service';
@@ -14,6 +14,7 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { finalize } from 'rxjs/operators';
 import { ImageCropperModule } from 'ngx-image-cropper';
 import { Ng2ImgMaxService } from 'ng2-img-max';
+import { ImageCropperComponent, CropperSettings, Bounds } from "ngx-img-cropper";
 
 @Component({
   selector: 'app-presenters-edit',
@@ -43,6 +44,18 @@ export class PresentersEditComponent implements OnInit {
   name: string;
   myBlob: Blob;
   fileInfo: Observable<any>;
+  croppedImage: any;
+  data1: any;
+  cropperSettings1: CropperSettings;
+  croppedWidth: number;
+  croppedHeight: number;
+
+  swapImage: boolean;
+  uploadCompleted: boolean = true;
+  processing: boolean;
+  compressedFile: any;
+
+  @ViewChild('cropper', undefined) cropper: ImageCropperComponent;
 
   constructor(
     private presenterService: PresenterService,
@@ -52,11 +65,89 @@ export class PresentersEditComponent implements OnInit {
     private storage: AngularFireStorage,
     private dialog: MatDialog,
     private ng2ImgMax: Ng2ImgMaxService,
-  ) { }
+  ) { 
+    this.name = 'Angular2'
+    this.cropperSettings1 = new CropperSettings();
+    this.cropperSettings1.width = 200;
+    this.cropperSettings1.height = 150;
+
+    this.cropperSettings1.croppedWidth = 800;
+    this.cropperSettings1.croppedHeight = 600;
+
+    // Canvas Size for DOM
+    this.cropperSettings1.canvasWidth = 275;
+    this.cropperSettings1.canvasHeight = 300;
+
+    this.cropperSettings1.minWidth = 10;
+    this.cropperSettings1.minHeight = 10;
+    // this.cropperSettings1.compressRatio = 2;
+
+    // this.cropperSettings1.dynamicSizing = true;
+    this.cropperSettings1.keepAspect = true;
+    this.cropperSettings1.preserveSize = false;
+
+    this.cropperSettings1.cropperDrawSettings.strokeColor = 'rgba(255,255,255,1)';
+    this.cropperSettings1.cropperDrawSettings.strokeWidth = 2;
+    this.cropperSettings1.cropperClass = "cropper-tool";
+
+    this.data1 = {};
+  }
 
   ngOnInit() {
     this.id = this.route.snapshot.params['id'];
     this.presenterService.getPresenter(this.id).subscribe(presenter => this.presenter = presenter);
+    var width = document.getElementsByClassName('card-body')["0"].offsetWidth;
+    this.cropperSettings1.canvasWidth = width - 40;
+    this.cropperSettings1.canvasHeight = width;
+  }
+
+  imageSwap() {
+    this.swapImage = !this.swapImage;
+  }
+
+  cropped(bounds: Bounds) {
+    this.croppedHeight = bounds.bottom - bounds.top;
+    this.croppedWidth = bounds.right - bounds.left;
+  }
+
+  finishedImageToFile(image) {
+    var myBlob: Blob = this.dataURItoBlob(image.src);
+    let myFile = new File([myBlob], "workshop-image.jpg", { type: 'image/jpeg' });
+    return myFile;
+  }
+
+  compressImage(myFile, compression) {
+    return new Promise((resolve, reject) => {
+      this.ng2ImgMax.compressImage(myFile, compression).subscribe(
+        result => {
+          this.compressedFile = new File([result], "workshop-image.jpg", { type: 'image/jpeg' }),
+            error => {
+              if (error) {
+                console.log("error")
+              }
+            }
+            ,
+            this.imageSwap();
+          this.uploadFile(this.compressedFile);
+        },
+        error => {
+          console.log('😢 Oh no!', error);
+        }
+      );
+    })
+  }
+
+  imageSelect() {
+    this.processing = true;
+    var image = document.getElementById('cropped-result');
+    var myFile: File = this.finishedImageToFile(image);
+    if (myFile.size > 5000000) {
+      this.compressImage(myFile, 0.250)
+    } else if (myFile.size > 3000000) {
+      this.compressImage(myFile, 0.125)
+    } else {
+      this.compressImage(myFile, 0.075)
+    }
   }
 
   onSubmit({ value, valid }: { value: Presenter, valid: boolean }) {
@@ -89,30 +180,21 @@ export class PresentersEditComponent implements OnInit {
     });
   };
 
-  // onNoClick(): void {
-  //   this.dialogRef.close();
-  // }
-
   onDeleteClick() {
     this.presenterService.deletePresenter(this.presenter);
     this.flashMessage.show('Presenter Removed', {
       cssClass: 'alert-success', timeout: 4000
     });
     this.router.navigate(['/presenters']);
-    // if (confirm('Are you sure?')) {
-    //   this.presenterService.deletePresenter(this.presenter);
-    //   this.flashMessage.show('Presenter Removed', {
-    //     cssClass: 'alert-success', timeout: 4000
-    //   });
-    //   this.router.navigate(['/presenters']);
-    // }
   }
 
-  toggleHover(event: boolean) {
-    this.isHovering = event;
+  uploadComplete() {
+    this.uploadCompleted = true;
+    this.processing = false;
   }
 
   uploadFile(event) {
+    this.uploadCompleted = false;
     const file = event;
     const filePath = `media/images/workshops/${new Date().getTime()}_${file.name}`;
     const fileRef = this.storage.ref(filePath);
@@ -133,7 +215,7 @@ export class PresentersEditComponent implements OnInit {
         });
       })
     )
-      .subscribe();
+      .subscribe(null, null, () => this.uploadComplete());
   }
 
   dataURItoBlob(dataURI) {
@@ -146,39 +228,6 @@ export class PresentersEditComponent implements OnInit {
       type: 'image/jpg'
     });
   }
-
-  blobToFile = (theBlob: Blob, fileName: string): File => {
-    var b: any = theBlob;
-    b.lastModifiedDate = new Date();
-    b.name = fileName;
-
-    return <File>theBlob;
-  }
-
-  openDialogUpload(): void {
-    let dialogRef = this.dialog.open(PresentersEditImageComponent, {
-      height: '95%',
-      width: '95%',
-      disableClose: false,
-    });
-
-    dialogRef.afterClosed().subscribe(croppedImage => {
-      if (croppedImage) {
-        var myBlob: Blob = this.dataURItoBlob(croppedImage);
-        let myFile = new File([myBlob], "workshop-image.jpg", { type: 'image/jpeg' });
-        this.ng2ImgMax.compressImage(myFile, 0.250).subscribe(
-          result => {
-            myFile = new File([result], "workshop-image.jpg", { type: 'image/jpeg' });
-            this.uploadFile(myFile);
-          },
-          error => {
-            console.log('😢 Oh no!', error);
-          }
-        );
-      }
-      dialogRef = null;
-    });
-  };
 
 }
 
@@ -195,44 +244,6 @@ export class DialogConfirmComponent {
 
   onNoClick(): void {
     this.dialogRef.close();
-  }
-
-}
-
-@Component({
-  selector: 'app-presenters-edit-image',
-  templateUrl: './presenters-edit-image.component.html',
-  styles: []
-})
-export class PresentersEditImageComponent {
-
-  aspect: string = " 4 / 3"
-
-  constructor(
-    public dialogRef: MatDialogRef<PresentersEditImageComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any) { }
-
-  onNoClick(): void {
-    this.dialogRef.close();
-  }
-
-  imageChangedEvent: any = '';
-  croppedImage: any = '';
-  imageRotation: number = 0;
-  imageFinishedLoading: boolean;
-
-  fileChangeEvent(event: any): void {
-    this.imageChangedEvent = event;
-  }
-  imageCropped(image: string) {
-    this.croppedImage = image;
-  }
-  imageLoaded() {
-    // show cropper
-    this.imageFinishedLoading = true;
-  }
-  loadImageFailed() {
-    // show message
   }
 
 }

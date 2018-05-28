@@ -8,6 +8,8 @@ import { User } from '../../models/user';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
+import { OnDestroy } from "@angular/core";
+import { Subscription } from 'rxjs/Subscription';
 
 type UserFields = 'email' | 'password';
 type FormErrors = { [u in UserFields]: string };
@@ -17,7 +19,9 @@ type FormErrors = { [u in UserFields]: string };
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
+
+  subscription: Subscription;
 
   user: User;
   email: string;
@@ -51,6 +55,10 @@ export class LoginComponent implements OnInit {
     private domSanitizer: DomSanitizer
   ) { 
     matIconRegistry.addSvgIconSet(domSanitizer.bypassSecurityTrustResourceUrl('./assets/icons/mdi.svg'));
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
   ngOnInit() {
@@ -134,7 +142,7 @@ export class LoginComponent implements OnInit {
 
   /// Shared
   private afterSignIn() {
-    this.userService.getUser(this.auth.getId()).subscribe(user => {
+    this.subscription = this.userService.getUser(this.auth.getId()).subscribe(user => {
       this.user = user;
       if (this.user.admin) {
         this.userService.admin = true;

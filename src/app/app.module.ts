@@ -35,12 +35,12 @@ import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { LoginComponent } from './components/login/login.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { WorkshopsHomeComponent } from './components/workshops-home/workshops-home.component';
-import { WorkshopsEditComponent, ConfirmComponent, WorkshopEditImageComponent } from './components/workshops-edit/workshops-edit.component';
-import { WorkshopsAddComponent, WorkshopAddImageComponent } from './components/workshops-add/workshops-add.component';
+import { WorkshopsEditComponent, ConfirmComponent } from './components/workshops-edit/workshops-edit.component';
+import { WorkshopsAddComponent } from './components/workshops-add/workshops-add.component';
 import { WorkshopDetailsComponent } from './components/workshop-details/workshop-details.component';
 import { PresentersDetailsComponent } from './components/presenters-details/presenters-details.component';
-import { PresentersAddComponent, PresentersAddImageComponent } from './components/presenters-add/presenters-add.component';
-import { PresentersEditComponent, DialogConfirmComponent, PresentersEditImageComponent } from './components/presenters-edit/presenters-edit.component';
+import { PresentersAddComponent } from './components/presenters-add/presenters-add.component';
+import { PresentersEditComponent, DialogConfirmComponent } from './components/presenters-edit/presenters-edit.component';
 import { PresentersHomeComponent } from './components/presenters-home/presenters-home.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 
@@ -56,11 +56,11 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatDividerModule } from '@angular/material/divider';
 
 // Cropping Tools
 import { Ng2ImgMaxModule } from 'ng2-img-max';
-import { ImageCropperModule } from 'ngx-image-cropper';
-import { ImageCropperComponent } from 'ngx-img-cropper';
+import { ImageCropperModule } from 'ngx-img-cropper';
 
 @NgModule({
   declarations: [
@@ -81,11 +81,6 @@ import { ImageCropperComponent } from 'ngx-img-cropper';
     ConfirmComponent,
     WorkshopDetailsComponent,
     PresentersDetailsComponent,
-    WorkshopAddImageComponent,
-    WorkshopEditImageComponent,
-    PresentersEditImageComponent,
-    PresentersAddImageComponent,
-    ImageCropperComponent
   ],
   imports: [
     BrowserModule,
@@ -110,11 +105,12 @@ import { ImageCropperComponent } from 'ngx-img-cropper';
     BrowserAnimationsModule,
     HttpClientModule,
     Ng2ImgMaxModule,
-    ImageCropperModule,
     MatProgressBarModule,
+    MatDividerModule,
+    ImageCropperModule
   ],
   entryComponents: [
-    DialogConfirmComponent, ConfirmComponent, WorkshopAddImageComponent, WorkshopEditImageComponent, PresentersEditImageComponent, PresentersAddImageComponent
+    DialogConfirmComponent, ConfirmComponent
   ],
   providers: [{ provide: FirebaseOptionsToken, useValue: environment.firebase }, AuthService, UserService, WorkshopsService, PresenterService, NotifyService],
   bootstrap: [AppComponent]

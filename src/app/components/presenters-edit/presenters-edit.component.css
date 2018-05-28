@@ -1,0 +1,17 @@
+.result img {
+    max-width: 100%;
+    height: 75%;
+}
+
+.image-upload {
+    margin-top: 10px;
+}
+
+.current-image img {
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.change-image {
+    color: var(--main-blue);
+}

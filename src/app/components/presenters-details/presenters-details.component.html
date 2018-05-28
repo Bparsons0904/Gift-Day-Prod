@@ -24,6 +24,11 @@
   </div>
 </div>
 
+<mat-divider></mat-divider>
+<div class="presenters-avail-workshops text-center">
+  <p>{{ presenter.name }} Workshop</p>
+</div>
+
 <div *ngFor="let workshop of workshops">
   <div class="card mx-auto" *ngIf="workshop.presenter1 == presenter.id || workshop.presenter2 == presenter.id">
     <img class="img-fluid" src="{{ workshop.imageURL }}" alt="{{ workshop.name + 'image' }}" routerLink="/workshops/{{ workshop.id }}">

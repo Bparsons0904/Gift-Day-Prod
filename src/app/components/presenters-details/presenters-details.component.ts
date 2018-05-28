@@ -5,6 +5,7 @@ import { Presenter } from '../../models/presenter';
 import { WorkshopsService } from '../../services/workshops.service';
 import { Workshop } from '../../models/Workshops';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatDividerModule } from '@angular/material/divider';
 
 
 @Component({

@@ -64,21 +64,13 @@
           <div *ngIf="!swapImage" class="ml-auto">
             <button (click)="imageSwap()" type="button" value="open" mat-raised-button class="submit-button text-center image-upload">Edit Image</button>
           </div>
-          
 
           <div *ngIf="swapImage">
             <img-cropper [image]="data1" [settings]="cropperSettings1" (onCrop)="cropped($event)"></img-cropper>
             <span class="result" *ngIf="swapImage && data1.image" (change)="fileChangeEvent($event)">
               <img id="cropped-result" [src]="data1.image" [width]="croppedWidth" [height]="croppedHeight" (change)="imageSelect()">
             </span>
-          
-          
           </div>
-
-          <!-- <div *ngIf="processing" class="processing">
-            {{ processing }}
-            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-          </div> -->
 
           <div *ngIf="processing" class="load-bar">
             <div class="bar"></div>
@@ -93,21 +85,11 @@
             <div *ngIf="data1.image && swapImage" class="ml-auto">
               <button (click)="imageSelect()" type="button" value="open" mat-raised-button class="submit-button text-center image-upload">Select Image</button>
             </div>
-            
           </div>
           
-
-          <!-- <div *ngIf="!swapImage && uploadPercent | async as pct">
-          
-            <progress class="progress is-info" [value]="pct" max="100">
-            </progress>
-            <p *ngIf="pct == 100">Upload Complete</p>
-          </div> -->
         </div>
         <!-- End Material Form -->
         
-        
-
         <div class="submit">
           <div class="mr-auto">
             <button [disabled]="swapImage" type="button" (click)="openDialog()" mat-raised-button class="delete-button text-center">Delete</button>
@@ -116,6 +98,7 @@
             <button [disabled]="swapImage || !uploadCompleted" type="submit" value="Submit" mat-raised-button class="submit-button text-center">Submit</button>
           </div>
         </div>
+
       </form>
     </div>
   </div>

@@ -47,195 +47,49 @@
             <input matInput placeholder="Session 3 Total Seats" type="text" class="form-control" [(ngModel)]="workshop.session3.totalSeats"
               name="totalSeats">
           </mat-form-field>
-  
-  
-  
-          <mat-form-field>
-            <input matInput placeholder="Workshop Image" type="string" class="form-control" [(ngModel)]="workshop.imageURL" name="imageURL"
-              #workshopImageURL="ngModel">
-          </mat-form-field>
-          <!-- <mat-form-field>
-            <textarea matInput placeholder="Presenter Bio" type="text" class="form-control" [ngClass]="{'is-invalid':presenterBio.errors && presenterBio.touched}"
-              [(ngModel)]="presenter.bio" name="bio" #presenterBio="ngModel" minlength="10" required></textarea>
-          </mat-form-field>
-          <mat-form-field>
-            <input matInput placeholder="Email" type="text" class="form-control" name="email" #presenterEmail="ngModel" [ngClass]="{'is-invalid':presenterEmail.errors && presenterEmail.touched}"
-              [(ngModel)]="presenter.email" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$">
-          </mat-form-field>
-          <mat-form-field>
-            <input matInput placeholder="Education" type="text" class="form-control" [ngClass]="{'is-invalid':presenterEducation.errors && presenterEducation.touched}"
-              [(ngModel)]="presenter.education" name="education" #presenterEducation="ngModel" minlength="3">
-          </mat-form-field>
-          <mat-form-field>
-            <input matInput placeholder="Current Employer" type="text" class="form-control" [ngClass]="{'is-invalid':presenterCurrentEmployer.errors && presenterCurrentEmployer.touched}"
-              [(ngModel)]="presenter.currentEmployer" name="currentEmployer" #presenterCurrentEmployer="ngModel" minlength="3">
-          </mat-form-field>
-          <mat-form-field>
-            <input matInput placeholder="Presenter Image" type="string" class="form-control" [(ngModel)]="presenter.imageURL" name="imageURL"
-              #presenterImageURL="ngModel">
-          </mat-form-field> -->
-  
-          <div class="file">
-            <!-- <label class="file-label">
-              <input class="file-input" type="file" (change)="openDialog()">
-            </label> -->
-            <button type="button" value="open" (click)="openDialog()" mat-raised-button class="select-button ml-auto text-center">Select Photo</button>
+          
+          <div *ngIf="workshop.imageURL && !swapImage" class="current-image">
+            <img class="img-responsive" src="{{ workshop.imageURL }}" alt="{{ workshop.name }} iamge">
           </div>
           
-          <div *ngIf="uploadPercent | async as pct">
-          
-            <progress class="progress is-info" [value]="pct" max="100">
-            </progress>
-            <p *ngIf="pct == 100">Upload Complete</p>
+          <div *ngIf="!swapImage && data1.image" class="ml-auto">
+            <button (click)="imageSwap()" type="button" value="open" mat-raised-button class="submit-button text-center image-upload">Edit Image</button>
+          </div>
+          <div *ngIf="!swapImage && !data1.image" class="ml-auto">
+            <button (click)="imageSwap()" type="button" value="open" mat-raised-button class="submit-button text-center image-upload">Add Image</button>
           </div>
           
-          <div class="ml-auto submit">
-            <button type="submit" value="Submit" mat-raised-button class="submit-button ml-auto text-center">Submit</button>
+          <div *ngIf="swapImage">
+            <img-cropper [image]="data1" [settings]="cropperSettings1" (onCrop)="cropped($event)"></img-cropper>
+            <span class="result" *ngIf="swapImage && data1.image" (change)="fileChangeEvent($event)">
+              <img id="cropped-result" [src]="data1.image" [width]="croppedWidth" [height]="croppedHeight" (change)="imageSelect()">
+            </span>
           </div>
+          
+          <div *ngIf="processing" class="load-bar">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+          </div>
+          
+          <div class="submit">
+            <div *ngIf="swapImage" class="mr-auto">
+              <button (click)="imageSwap()" type="button" value="open" mat-raised-button class="cancel-button text-center image-upload">Cancel</button>
+            </div>
+            <div *ngIf="data1.image && swapImage" class="ml-auto">
+              <button (click)="imageSelect()" type="button" value="open" mat-raised-button class="submit-button text-center image-upload">Select Image</button>
+            </div>
+          
+          </div>
+
         </div>
         <!-- End Material Form -->
-  
-  
-        <!-- <div class="form-group">
-          <label for="name">Workshop Name</label>
-          <input type="text" class="form-control" name="name" #workshopName="ngModel" [ngClass]="{'is-invalid':workshopName.errors && workshopName.touched}"
-            [(ngModel)]="workshop.name" minlength="2" required>
-          <div [hidden]="!workshopName.errors?.required" class="invalid-feedback">
-            Workshop Name Required
-          </div>
-          <div [hidden]="!workshopName.errors?.minlength" class="invalid-feedback">
-            Must be at least 2 characters
+
+        <div class="submit">
+          <div class="ml-auto">
+            <button [disabled]="swapImage || !uploadCompleted" type="submit" value="Submit" mat-raised-button class="submit-button text-center">Submit</button>
           </div>
         </div>
-  
-        <div class="form-group">
-          <label for="presenter1">Primary Presenter</label> <a routerLink="/presenters/add">Add Presenter</a>
-          <select type="text" class="form-control" name="presenter1" #workshopPresenter="ngModel" [(ngModel)]="workshop.presenter1" required>
-            <option *ngFor="let presenter of presenters" [ngValue]="presenter.id">{{ presenter.name }}</option>
-          </select>
-        </div> -->
-  
-        <!-- <p><input type="checkbox" name="secondPresenter" value="true" [(ngModel)]="secondPresenter">Add Second Presenter?</p> -->
-  
-        <!-- <div class="form-group">
-          <label for="presenter2">Assistant Presenter</label> <a routerLink="/presenters/add">Add Presenter</a>
-          <select type="text" class="form-control" name="presenter2" #workshopPresenter="ngModel" [(ngModel)]="workshop.presenter2">
-            <option *ngFor="let presenter of presenters" [ngValue]="presenter.id">{{ presenter.name }}</option>
-          </select>
-        </div> -->
-  
-        <!-- <div class="form-group">
-          <label for="workshop.presenter">Presenter</label>
-          <input type="text" class="form-control" name="presenter" #workshopPresenter="ngModel" [ngClass]="{'is-invalid':workshopPresenter.errors && workshopPresenter.touched}"
-            [(ngModel)]="presenter" minlength="2" required>
-          <div [hidden]="!workshopPresenter.errors?.required" class="invalid-feedback">
-            Presenter Required
-          </div>
-          <div [hidden]="!workshopPresenter.errors?.minlength" class="invalid-feedback">
-            Must be at least 2 characters
-          </div>
-        </div> -->
-  
-        <!-- <div class="form-group">
-          <label for="presenter">Presenter</label>
-          <input type="text" class="form-control" name="presenter" #clientEmail="ngModel" [ngClass]="{'is-invalid':clientEmail.errors && clientEmail.touched}"
-            [(ngModel)]="workshop.email" required pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$">
-          <div [hidden]="!clientEmail.errors?.required" class="invalid-feedback">
-            Email Required
-          </div>
-          <div [hidden]="!clientEmail.errors?.pattern" class="invalid-feedback">
-            Email is not valid.
-          </div>
-        </div> -->
-  
-        <!-- <div class="form-group">
-          <label for="description">Workshop Description</label>
-          <input type="text" class="form-control" [ngClass]="{'is-invalid':workshopDescription.errors && workshopDescription.touched}" [(ngModel)]="workshop.description"
-            name="description" #workshopDescription="ngModel" minlength="10" required>
-          <div [hidden]="!workshopDescription.errors?.required" class="invalid-feedback">
-            Description is required
-          </div>
-          <div [hidden]="!workshopDescription.errors?.minlength" class="invalid-feedback">
-            Description must be at least 10 characters
-          </div>
-        </div>
-  
-        <div class="form-group">
-          <label for="room">Workshop Room</label>
-          <input type="text" class="form-control" [ngClass]="{'is-invalid':workshopRoom.errors && workshopRoom.touched}" [(ngModel)]="workshop.room"
-            name="room" #workshopRoom="ngModel" minlength="3" required>
-          <div [hidden]="!workshopRoom.errors?.required" class="invalid-feedback">
-            Room is required
-          </div>
-          <div [hidden]="!workshopRoom.errors?.minlength" class="invalid-feedback">
-            Room must be at least 3 characters
-          </div>
-        </div>
-  
-        <div class="form-group">
-          <label for="imageURL">Workshop Image</label>
-          <input type="string" class="form-control" [(ngModel)]="workshop.imageURL" name="imageURL" #workshopImageURL="ngModel">
-        </div>
-  
-        <div class="dropzone" dropZone (hovered)="toggleHover($event)" (dropped)="startUpload($event)" [class.hovering]="isHovering">
-          <div class="file">
-            <label class="file-label">
-              <input class="file-input" type="file" (change)="startUpload($event.target.files)">
-            </label>
-          </div>
-        </div>
-        
-        <div *ngIf="percentage | async as pct">
-        
-          <progress class="progress is-info" [value]="pct" max="100">
-          </progress>
-          <p>{{ pct | number }}%</p>
-        </div>
-        
-        <div *ngIf="snapshot | async as snap">
-          <p *ngIf="!isActive(snap) && downloadURL">Upload Complete</p>
-        </div> -->
-  
-        <!-- <div>
-          <p>Sessions Available:</p>
-          <p>
-            <input type="checkbox" name="session1Check" value="true" [(ngModel)]="session1Check">Session 1?</p>
-          <p>
-            <input type="checkbox" name="session2Check" value="true" [(ngModel)]="session2Check">Session 2?</p>
-          <p>
-            <input type="checkbox" name="session3Check" value="true" [(ngModel)]="session3Check">Session 3?</p>
-        </div> -->
-  
-        <!-- <div>
-          <div class="form-group">
-            <label for="totalSeats">Session 1 Total Seats</label>
-            <input type="number" class="form-control" [(ngModel)]="workshop.session1.totalSeats" name="totalSeats">
-          </div>
-        </div>
-  
-        <div>
-          <div class="form-group">
-            <label for="totalSeats">Session 2 Total Seats</label>
-            <input type="number" class="form-control" [(ngModel)]="workshop.session2.totalSeats" name="totalSeats" #totalSeats="ngModel">
-          </div>
-        </div>
-  
-        <div>
-          <div class="form-group">
-            <label for="totalSeats">Session 3 Total Seats</label>
-            <input type="number" class="form-control" [(ngModel)]="workshop.session3.totalSeats" name="totalSeats" #totalSeats="ngModel">
-          </div>
-        </div> -->
-  
-        <!-- <div class="form-group">
-          <label for="totalSeats">Total Seats</label>
-          <input type="number" class="form-control" [(ngModel)]="workshop.totalSeats" name="totalSeats" #workshopTotalSeats="ngModel">
-        </div> -->
-  
-  
-  
-        <!-- <input type="submit" value="Submit" class="btn btn-primary btn-block"> -->
-  
       </form>
     </div>
   </div>

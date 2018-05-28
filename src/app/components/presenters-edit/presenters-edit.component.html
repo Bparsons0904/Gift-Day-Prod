@@ -67,31 +67,45 @@
                     Employer must be at least 3 characters
                   </div> -->
           </mat-form-field>
-          <mat-form-field>
-            <!-- <div class="form-group">
-                    
-                  </div> -->
-            <input matInput placeholder="Presenter Image" type="string" class="form-control" [(ngModel)]="presenter.imageURL" name="imageURL"
-              #presenterImageURL="ngModel">
-          </mat-form-field>
 
-          <div class="file">
-            <button type="button" value="open" (click)="openDialogUpload()" mat-raised-button class="select-button ml-auto text-center">Select Photo</button>
+          <div *ngIf="presenter.imageURL && !swapImage" class="current-image">
+            <img class="img-responsive" src="{{ presenter.imageURL }}" alt="{{ presenter.name }} iamge">
           </div>
           
-          <div *ngIf="uploadPercent | async as pct">
+          <div *ngIf="!swapImage" class="ml-auto">
+            <button (click)="imageSwap()" type="button" value="open" mat-raised-button class="submit-button text-center image-upload">Edit Image</button>
+          </div>
           
-            <progress class="progress is-info" [value]="pct" max="100">
-            </progress>
-            <p *ngIf="pct == 100">Upload Complete</p>
+          <div *ngIf="swapImage">
+            <img-cropper [image]="data1" [settings]="cropperSettings1" (onCrop)="cropped($event)"></img-cropper>
+            <span class="result" *ngIf="swapImage && data1.image" (change)="fileChangeEvent($event)">
+              <img id="cropped-result" [src]="data1.image" [width]="croppedWidth" [height]="croppedHeight" (change)="imageSelect()">
+            </span>
+          </div>
+          
+          <div *ngIf="processing" class="load-bar">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+          </div>
+          
+          <div class="submit">
+            <div *ngIf="swapImage" class="mr-auto">
+              <button (click)="imageSwap()" type="button" value="open" mat-raised-button class="cancel-button text-center image-upload">Cancel</button>
+            </div>
+            <div *ngIf="data1.image && swapImage" class="ml-auto">
+              <button (click)="imageSelect()" type="button" value="open" mat-raised-button class="submit-button text-center image-upload">Select Image</button>
+            </div>
           </div>
         </div>
+        <!-- End Material Form -->
+        
         <div class="submit">
           <div class="mr-auto">
-            <button type="button" (click)="openDialog()" mat-raised-button class="delete-button text-center">Delete</button>
+            <button [disabled]="swapImage" type="button" (click)="openDialog()" mat-raised-button class="delete-button text-center">Delete</button>
           </div>
           <div class="ml-auto">
-            <button type="submit" value="Submit" mat-raised-button class="submit-button text-center">Submit</button>
+            <button [disabled]="swapImage || !uploadCompleted" type="submit" value="Submit" mat-raised-button class="submit-button text-center">Submit</button>
           </div>
         </div>
 
@@ -99,29 +113,4 @@
 
     </div>
   </div>
-
-  <!-- <div class="row">
-    <div class="preview text-center">
-      <h2>Edit Preview</h2>
-    </div>
-    <div class="card-deck">
-      <div class="card">
-        <img class="img-fluid" src="{{ workshop.imageURL }}" alt="{{ workshop.name + ' image' }}">
-        <div class="card-body">
-          <h3 class="card-text">{{ workshop.name }}</h3>
-          <p class="card-text">{{ workshop.presenter }}</p>
-          <p class="card-text">
-            {{ (workshop.description.length > 200)? (workshop.description | slice:0:200) + '...':(workshop.description) }}
-          </p>
-        </div>
-        <div class="card-footer">
-          <div class="row">
-            <p class="class-muted mr-auto details">Workshop Details</p>
-            <p class="text-muted ml-auto available">Available Seats: {{ workshop.availableSeats }}</p>
-          </div>
-          <a *ngIf="admin" routerLink="/editworkshop/{{ workshop.id }}">Edit Workshops</a>
-        </div>
-      </div>
-    </div>
-  </div> -->
 </div>
