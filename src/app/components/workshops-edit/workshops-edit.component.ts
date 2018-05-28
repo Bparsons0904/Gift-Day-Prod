@@ -25,6 +25,8 @@ import {
 } from '@angular/core';
 import { DomSanitizer, SafeUrl, SafeStyle } from '@angular/platform-browser';
 import { ImageCropperComponent, CropperSettings, Bounds } from "ngx-img-cropper";
+import { resolve, reject } from 'q';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 @Component({
   selector: 'app-workshops-edit',
@@ -69,13 +71,19 @@ export class WorkshopsEditComponent implements OnInit {
   uploadPercent: Observable<number>;
   myBlob: Blob;
   fileInfo: Observable<any>;
-  
+  compressedFile: any;
+
+  croppedImage: any;
   name: string;
   data1: any;
   cropperSettings1: CropperSettings;
   croppedWidth: number;
   croppedHeight: number;
 
+  swapImage: boolean;
+  uploadCompleted: boolean = true;
+  processing: boolean;
+  
   @ViewChild('cropper', undefined) cropper: ImageCropperComponent;
 
   constructor(
@@ -91,43 +99,77 @@ export class WorkshopsEditComponent implements OnInit {
     this.name = 'Angular2'
     this.cropperSettings1 = new CropperSettings();
     this.cropperSettings1.width = 200;
-    this.cropperSettings1.height = 200;
+    this.cropperSettings1.height = 150;
 
-    this.cropperSettings1.croppedWidth = 200;
-    this.cropperSettings1.croppedHeight = 200;
+    this.cropperSettings1.croppedWidth = 800;
+    this.cropperSettings1.croppedHeight = 600;
 
-    this.cropperSettings1.canvasWidth = 500;
+    // Canvas Size for DOM
+    this.cropperSettings1.canvasWidth = 275;
     this.cropperSettings1.canvasHeight = 300;
 
     this.cropperSettings1.minWidth = 10;
     this.cropperSettings1.minHeight = 10;
+    // this.cropperSettings1.compressRatio = 2;
 
-    this.cropperSettings1.rounded = false;
-    this.cropperSettings1.keepAspect = false;
+    // this.cropperSettings1.dynamicSizing = true;
+    this.cropperSettings1.keepAspect = true;
+    this.cropperSettings1.preserveSize = false;
 
-    this.cropperSettings1.cropperDrawSettings.strokeColor = 'rgba(255,255,255,1)';
-    this.cropperSettings1.cropperDrawSettings.strokeWidth = 2;
+    // this.cropperSettings1.cropperDrawSettings.strokeColor = 'rgba(255,255,255,1)';
+    // this.cropperSettings1.cropperDrawSettings.strokeWidth = 2;
+    this.cropperSettings1.cropperClass = "cropper-tool";
 
     this.data1 = {};
    }
+
+  imageSwap() {
+    this.swapImage = !this.swapImage;
+  }
 
   cropped(bounds: Bounds) {
     this.croppedHeight = bounds.bottom - bounds.top;
     this.croppedWidth = bounds.right - bounds.left;
   }
 
-  fileChangeListener($event) {
-    var image: any = new Image();
-    var file: File = $event.target.files[0];
-    var myReader: FileReader = new FileReader();
-    var that = this;
-    myReader.onloadend = function (loadEvent: any) {
-      image.src = loadEvent.target.result;
-      that.cropper.setImage(image);
+  finishedImageToFile(image) {
+    var myBlob: Blob = this.dataURItoBlob(image.src);
+    let myFile = new File([myBlob], "workshop-image.jpg", { type: 'image/jpeg' });
+    return myFile;
+  }
 
-    };
+  compressImage(myFile, compression) {
+    return new Promise((resolve, reject) => {
+      this.ng2ImgMax.compressImage(myFile, compression).subscribe(
+        result => {
+          this.compressedFile = new File([result], "workshop-image.jpg", { type: 'image/jpeg' }),
+          error => {
+            if(error) {
+            console.log("error")
+          }}
+            ,
+            this.imageSwap();
+            this.uploadFile(this.compressedFile);
+        },
+        error => {
+          console.log('😢 Oh no!', error);
+        }
+      );
+    })
+  }
 
-    myReader.readAsDataURL(file);
+  imageSelect() {
+    this.processing = true;
+    var image = document.getElementById('cropped-result');
+    var myFile: File = this.finishedImageToFile(image);
+    if(myFile.size > 5000000) {
+      this.compressImage(myFile, 0.250)
+    } else if (myFile.size > 3000000){
+      this.compressImage(myFile, 0.125)
+    } else {
+      this.compressImage(myFile, 0.075)
+    }
+    // this.compressImage(myFile, compression)
   }
 
   ngOnInit() {
@@ -189,7 +231,13 @@ export class WorkshopsEditComponent implements OnInit {
     this.isHovering = event;
   }
 
+  uploadComplete() {
+    this.uploadCompleted = true;
+    this.processing = false;
+  }
+
   uploadFile(event) {
+    this.uploadCompleted = false;
     const file = event;
     const filePath = `media/images/workshops/${new Date().getTime()}_${file.name}`;
     const fileRef = this.storage.ref(filePath);
@@ -210,7 +258,9 @@ export class WorkshopsEditComponent implements OnInit {
         });
       })
     )
-      .subscribe();
+      .subscribe(
+        null, null, () => this.uploadComplete()
+      );
   }
 
   dataURItoBlob(dataURI) {
@@ -268,10 +318,7 @@ export class WorkshopsEditComponent implements OnInit {
     });
   };
 
-  imageSelect() {
-    console.log("Image Select");
-    
-  }
+  
 }
 
 @Component({

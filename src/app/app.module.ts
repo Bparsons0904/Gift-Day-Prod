@@ -55,8 +55,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { ImageCropperModule } from 'ngx-image-cropper';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+
+// Cropping Tools
 import { Ng2ImgMaxModule } from 'ng2-img-max';
+import { ImageCropperModule } from 'ngx-image-cropper';
+import { ImageCropperComponent } from 'ngx-img-cropper';
 
 @NgModule({
   declarations: [
@@ -81,6 +85,7 @@ import { Ng2ImgMaxModule } from 'ng2-img-max';
     WorkshopEditImageComponent,
     PresentersEditImageComponent,
     PresentersAddImageComponent,
+    ImageCropperComponent
   ],
   imports: [
     BrowserModule,
@@ -106,6 +111,7 @@ import { Ng2ImgMaxModule } from 'ng2-img-max';
     HttpClientModule,
     Ng2ImgMaxModule,
     ImageCropperModule,
+    MatProgressBarModule,
   ],
   entryComponents: [
     DialogConfirmComponent, ConfirmComponent, WorkshopAddImageComponent, WorkshopEditImageComponent, PresentersEditImageComponent, PresentersAddImageComponent
