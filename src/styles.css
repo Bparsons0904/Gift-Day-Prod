@@ -7,7 +7,8 @@
 --main-blue: #40C4FF;
 --main-grey: #FAFAFA;
 /* --orange-dark: #E89E00; */
---orange-dark: #FFAB00;
+/* --orange-dark: #FFAB00; */
+--orange-dark: #ffa10d;
 --offset-blue: #07C1FF;
 --accent-green: #69ff64;
 --accent-blue:  #0745FF;
@@ -60,20 +61,20 @@
     margin-left: 25px;
 }
 
-progress::-webkit-progress-value {
+/* progress::-webkit-progress-value {
     transition: width 0.1s ease;
 }
 .progress {
     width: 100%;
     margin-top: 10px;
     margin-bottom: 5px;
-}
+} */
 .form-container {
   display: flex;
   flex-direction: column;
 }
 
-.form-container > * {
+/* .form-container > * {
   width: 100%;
 }
 
@@ -81,7 +82,7 @@ progress::-webkit-progress-value {
 
 .dropzone {
     margin-top: 10px;
-}
+} */
 
 .mat-form-field-flex {
     display: inline-flex;
@@ -125,10 +126,10 @@ progress::-webkit-progress-value {
     background-color: white;
 }
 
-.rotate {
+/* .rotate {
     max-width: 175px!important;
     margin-top: 10px;
-}
+} */
 
 .mat-dialog-container {
     margin: auto;
@@ -145,7 +146,7 @@ progress::-webkit-progress-value {
     width: 100%;
 } 
 
-.load-bar {
+/* .load-bar {
   position: relative;
   margin-top: 20px;
   width: 100%;
@@ -177,7 +178,7 @@ progress::-webkit-progress-value {
     from {left: 50%; width: 0;z-index:100;}
     33.3333% {left: 0; width: 100%;z-index: 10;}
     to {left: 0; width: 100%;}
-}
+} */
 
 .footer-space {
     margin: 25px;

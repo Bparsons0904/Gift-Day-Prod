@@ -42,6 +42,22 @@
     padding: 0px;
 }
 
+.row ::before {
+    display: inline-block;
+}
+
+.row ::after {
+    display: inline-block;
+}
+
+.top {
+    height: 250px;
+}
+
+.bottom {
+    height: 175px;
+}
+
 @media (min-width: 768px) { 
     .header-body {
         padding-bottom: 0px;
