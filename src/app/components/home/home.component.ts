@@ -9,7 +9,12 @@ export class HomeComponent implements OnInit {
 
   constructor() { }
 
+  ie = false;
+
   ngOnInit() {
+    if (!!navigator.userAgent.match(/Trident\/7\./)) {
+      this.ie = true;
+    }
   }
 
 }

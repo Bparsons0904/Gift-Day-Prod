@@ -12,3 +12,9 @@
 .nav-item a {
     color: white;
 }
+
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+    .navbar {
+        background-color: #FFC107;
+    }
+ }
